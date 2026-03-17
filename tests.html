@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Test Series — Utkarsh Home Tuition</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Baloo+2:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="logo"><span class="logo-icon"><i class="fas fa-graduation-cap"></i></span><div class="logo-text"><span class="logo-main">Utkarsh</span><span class="logo-sub">Home Tuition</span></div></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li class="dropdown"><a href="#">Classes <i class="fas fa-chevron-down"></i></a><div class="dropdown-menu"><a href="individual.html"><i class="fas fa-user"></i> Individual</a><a href="group.html"><i class="fas fa-users"></i> Group</a><div class="divider"></div><a href="online.html"><i class="fas fa-laptop"></i> Online</a><a href="offline.html"><i class="fas fa-chalkboard-teacher"></i> Offline</a></div></li>
+        <li class="dropdown"><a href="#">Study Store <i class="fas fa-chevron-down"></i></a><div class="dropdown-menu"><a href="notes.html"><i class="fas fa-book-open"></i> Notes</a><a href="materials.html"><i class="fas fa-file-alt"></i> Study Material</a><a href="tests.html"><i class="fas fa-clipboard-list"></i> Test Series</a></div></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+      <div class="nav-actions"><a href="tel:+919999999999" class="btn btn-outline"><i class="fas fa-phone"></i> Call Now</a><a href="index.html#enroll" class="btn btn-primary">Enroll Free</a></div>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <section class="page-hero">
+    <div class="container">
+      <div class="breadcrumb"><a href="index.html">Home</a><i class="fas fa-chevron-right"></i><a href="#">Store</a><i class="fas fa-chevron-right"></i><span>Test Series</span></div>
+      <h1><i class="fas fa-clipboard-list"></i> Test Series</h1>
+      <p>Practice tests with detailed solutions, performance analytics &amp; leaderboard</p>
+    </div>
+    <div class="page-hero-wave"><svg viewBox="0 0 1440 60" preserveAspectRatio="none"><path d="M0,30 C480,60 960,0 1440,30 L1440,60 L0,60 Z" fill="#f8f9ff"/></svg></div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <!-- Features strip -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:3rem;">
+        <div style="background:#fff;border-radius:var(--radius-md);padding:1.25rem;text-align:center;border:1px solid var(--border);">
+          <i class="fas fa-chart-bar" style="font-size:1.6rem;color:var(--indigo);margin-bottom:.5rem;display:block;"></i>
+          <strong>Performance Analytics</strong><p style="font-size:.8rem;color:var(--text-mid);margin-top:.25rem;">Detailed score breakdown per topic</p>
+        </div>
+        <div style="background:#fff;border-radius:var(--radius-md);padding:1.25rem;text-align:center;border:1px solid var(--border);">
+          <i class="fas fa-redo" style="font-size:1.6rem;color:var(--saffron);margin-bottom:.5rem;display:block;"></i>
+          <strong>Unlimited Reattempts</strong><p style="font-size:.8rem;color:var(--text-mid);margin-top:.25rem;">Retry each test as many times as needed</p>
+        </div>
+        <div style="background:#fff;border-radius:var(--radius-md);padding:1.25rem;text-align:center;border:1px solid var(--border);">
+          <i class="fas fa-trophy" style="font-size:1.6rem;color:#F59E0B;margin-bottom:.5rem;display:block;"></i>
+          <strong>Leaderboard</strong><p style="font-size:.8rem;color:var(--text-mid);margin-top:.25rem;">Compete with students across India</p>
+        </div>
+        <div style="background:#fff;border-radius:var(--radius-md);padding:1.25rem;text-align:center;border:1px solid var(--border);">
+          <i class="fas fa-check-double" style="font-size:1.6rem;color:var(--green);margin-bottom:.5rem;display:block;"></i>
+          <strong>Detailed Solutions</strong><p style="font-size:.8rem;color:var(--text-mid);margin-top:.25rem;">Step-by-step answers for every question</p>
+        </div>
+      </div>
+
+      <!-- Plans -->
+      <div class="section-header"><span class="section-badge">Pricing</span><h2>Choose Your Test <span class="highlight">Pack</span></h2></div>
+      <div class="plans-grid" style="margin-bottom:3rem;">
+        <div class="plan-card">
+          <div class="plan-label">Starter</div>
+          <div class="plan-price">₹99 <span>for 5 tests</span></div>
+          <div class="plan-desc">Try it out — 5 full-length chapter tests</div>
+          <ul class="plan-features">
+            <li><i class="fas fa-check"></i> 5 chapter-level tests</li>
+            <li><i class="fas fa-check"></i> Detailed solutions</li>
+            <li><i class="fas fa-check"></i> Score report</li>
+            <li class="cross"><i class="fas fa-times"></i> Performance analytics</li>
+            <li class="cross"><i class="fas fa-times"></i> Leaderboard access</li>
+          </ul>
+          <button class="btn btn-outline" onclick="buyNow('Test Series Starter Pack','99')">Buy Now</button>
+        </div>
+        <div class="plan-card featured">
+          <div class="plan-label">Full Series ⭐ Most Popular</div>
+          <div class="plan-price">₹499 <span>/ subject / class</span></div>
+          <div class="plan-desc">Complete test series for the full year</div>
+          <ul class="plan-features">
+            <li><i class="fas fa-check"></i> 30+ tests (weekly + monthly)</li>
+            <li><i class="fas fa-check"></i> Detailed solutions</li>
+            <li><i class="fas fa-check"></i> Full performance analytics</li>
+            <li><i class="fas fa-check"></i> Leaderboard access</li>
+            <li><i class="fas fa-check"></i> Previous year papers included</li>
+          </ul>
+          <button class="btn btn-primary" onclick="buyNow('Full Test Series','499')">Buy Now</button>
+        </div>
+        <div class="plan-card">
+          <div class="plan-label">Mega Bundle</div>
+          <div class="plan-price">₹999 <span>all subjects</span></div>
+          <div class="plan-desc">All subjects for a single class — best for board exam prep</div>
+          <ul class="plan-features">
+            <li><i class="fas fa-check"></i> 100+ tests — all subjects</li>
+            <li><i class="fas fa-check"></i> Full mock board papers</li>
+            <li><i class="fas fa-check"></i> Analytics + Leaderboard</li>
+            <li><i class="fas fa-check"></i> PYQ 10 years included</li>
+            <li><i class="fas fa-check"></i> Priority teacher support</li>
+          </ul>
+          <button class="btn btn-outline" onclick="buyNow('Mega Bundle — All Subjects','999')">Buy Now</button>
+        </div>
+      </div>
+
+      <!-- Available series -->
+      <div class="section-header"><h2>Available Test <span class="highlight">Series</span></h2></div>
+      <div class="product-grid">
+        <div class="product-card">
+          <div class="product-thumb thumb-test"><i class="fas fa-clipboard-list" style="color:var(--green);"></i></div>
+          <div class="product-body">
+            <div class="product-meta"><span class="product-class">Class 10</span><span class="product-subject">CBSE</span></div>
+            <h4>Mathematics Full Series</h4>
+            <p>30 tests — chapter-wise + 5 full mock papers with solutions.</p>
+            <div class="product-footer"><span class="product-price">₹499</span><button class="product-buy" onclick="buyNow('Maths Class 10 Test Series','499')">Buy</button></div>
+          </div>
+        </div>
+        <div class="product-card">
+          <div class="product-thumb thumb-test"><i class="fas fa-clipboard-list" style="color:var(--green);"></i></div>
+          <div class="product-body">
+            <div class="product-meta"><span class="product-class">Class 10</span><span class="product-subject">CBSE</span></div>
+            <h4>Science Full Series</h4>
+            <p>25 tests covering Phy, Chem &amp; Bio with 3 full mock papers.</p>
+            <div class="product-footer"><span class="product-price">₹499</span><button class="product-buy" onclick="buyNow('Science Class 10 Test Series','499')">Buy</button></div>
+          </div>
+        </div>
+        <div class="product-card">
+          <div class="product-thumb thumb-test"><i class="fas fa-clipboard-list" style="color:var(--green);"></i></div>
+          <div class="product-body">
+            <div class="product-meta"><span class="product-class">Class 12</span><span class="product-subject">CBSE</span></div>
+            <h4>Physics Full Series</h4>
+            <p>35 tests + 5 full mock papers with detailed solutions &amp; PYQs.</p>
+            <div class="product-footer"><span class="product-price">₹499</span><button class="product-buy" onclick="buyNow('Physics Class 12 Test Series','499')">Buy</button></div>
+          </div>
+        </div>
+        <div class="product-card">
+          <div class="product-thumb thumb-test"><i class="fas fa-clipboard-list" style="color:var(--green);"></i></div>
+          <div class="product-body">
+            <div class="product-meta"><span class="product-class">Class 12</span><span class="product-subject">CBSE</span></div>
+            <h4>Chemistry Full Series</h4>
+            <p>30 tests — Organic, Inorganic &amp; Physical with mock papers.</p>
+            <div class="product-footer"><span class="product-price">₹499</span><button class="product-buy" onclick="buyNow('Chemistry Class 12 Test Series','499')">Buy</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="buy-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;">
+    <div style="background:#fff;border-radius:var(--radius-lg);padding:2rem;max-width:420px;width:90%;text-align:center;">
+      <h3 id="modal-title" style="margin-bottom:.5rem;"></h3>
+      <p style="color:var(--text-mid);font-size:.9rem;margin-bottom:1.5rem;">Complete payment via WhatsApp. Access credentials will be shared instantly.</p>
+      <div style="display:flex;gap:.75rem;justify-content:center;">
+        <a id="modal-wa" href="#" class="btn btn-primary" style="background:linear-gradient(135deg,#25D366,#1a9a4e);"><i class="fab fa-whatsapp"></i> Pay via WhatsApp</a>
+        <button class="btn btn-outline" onclick="document.getElementById('buy-modal').style.display='none'">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer"><div class="footer-bottom"><p>&copy; 2026 Utkarsh Home Tuition. All rights reserved. | Made with <i class="fas fa-heart"></i> in India</p></div></footer>
+  <script src="main.js"></script>
+  <script>
+    function buyNow(name, price) {
+      document.getElementById('modal-title').textContent = name + ' — ₹' + price;
+      const msg = encodeURIComponent('Hi! I want to buy ' + name + ' (₹' + price + '). Please share the payment link.');
+      document.getElementById('modal-wa').href = 'https://wa.me/919999999999?text=' + msg;
+      document.getElementById('buy-modal').style.display = 'flex';
+    }
+  </script>
+</body>
+</html>

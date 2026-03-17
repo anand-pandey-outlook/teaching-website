@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Group Tuition — Utkarsh Home Tuition</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Baloo+2:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="logo"><span class="logo-icon"><i class="fas fa-graduation-cap"></i></span><div class="logo-text"><span class="logo-main">Utkarsh</span><span class="logo-sub">Home Tuition</span></div></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li class="dropdown"><a href="#">Classes <i class="fas fa-chevron-down"></i></a><div class="dropdown-menu"><a href="individual.html"><i class="fas fa-user"></i> Individual</a><a href="group.html"><i class="fas fa-users"></i> Group</a><div class="divider"></div><a href="online.html"><i class="fas fa-laptop"></i> Online</a><a href="offline.html"><i class="fas fa-chalkboard-teacher"></i> Offline</a></div></li>
+        <li class="dropdown"><a href="#">Study Store <i class="fas fa-chevron-down"></i></a><div class="dropdown-menu"><a href="notes.html"><i class="fas fa-book-open"></i> Notes</a><a href="materials.html"><i class="fas fa-file-alt"></i> Study Material</a><a href="tests.html"><i class="fas fa-clipboard-list"></i> Test Series</a></div></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+      <div class="nav-actions"><a href="tel:+919999999999" class="btn btn-outline"><i class="fas fa-phone"></i> Call Now</a><a href="index.html#enroll" class="btn btn-primary">Enroll Free</a></div>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <section class="page-hero">
+    <div class="container">
+      <div class="breadcrumb"><a href="index.html">Home</a><i class="fas fa-chevron-right"></i><span>Group Tuition</span></div>
+      <h1><i class="fas fa-users"></i> Group Tuition</h1>
+      <p>Small batch classes (4–8 students) — collaborative, affordable, competitive</p>
+    </div>
+    <div class="page-hero-wave"><svg viewBox="0 0 1440 60" preserveAspectRatio="none"><path d="M0,30 C480,60 960,0 1440,30 L1440,60 L0,60 Z" fill="#f8f9ff"/></svg></div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <!-- Mode toggle -->
+      <div style="text-align:center;margin-bottom:2rem;">
+        <div class="filter-bar" style="justify-content:center;">
+          <button class="filter-btn active" onclick="switchMode(this,'g-online','g-offline')">Online</button>
+          <button class="filter-btn" onclick="switchMode(this,'g-offline','g-online')">Offline / Home Visit</button>
+        </div>
+      </div>
+
+      <div id="g-online" class="plans-grid">
+        <div class="plan-card">
+          <div class="plan-label">Primary</div>
+          <div class="plan-price">₹300 <span>/ month</span></div>
+          <div class="plan-desc">Class 1–5 · up to 6 students per batch</div>
+          <ul class="plan-features">
+            <li><i class="fas fa-check"></i> 3 sessions/week (45 min each)</li>
+            <li><i class="fas fa-check"></i> 1 subject</li>
+            <li><i class="fas fa-check"></i> WhatsApp group support</li>
+            <li><i class="fas fa-check"></i> Weekly quiz</li>
+          </ul>
+          <a href="index.html#enroll" class="btn btn-outline">Join Batch</a>
+        </div>
+        <div class="plan-card featured">
+          <div class="plan-label">Middle School ⭐ Best Value</div>
+          <div class="plan-price">₹550 <span>/ month</span></div>
+          <div class="plan-desc">Class 6–10 · up to 8 students per batch</div>
+          <ul class="plan-features">
+            <li><i class="fas fa-check"></i> 3 sessions/week (1 hr each)</li>
+            <li><i class="fas fa-check"></i> Up to 2 subjects</li>
+            <li><i class="fas fa-check"></i> WhatsApp group support</li>
+            <li><i class="fas fa-check"></i> Monthly test &amp; report card</li>
+            <li><i class="fas fa-check"></i> Session recordings</li>
+          </ul>
+          <a href="index.html#enroll" class="btn btn-primary">Join Batch</a>
+        </div>
+        <div class="plan-card">
+          <div class="plan-label">Senior Secondary</div>
+          <div class="plan-price">₹900 <span>/ month</span></div>
+          <div class="plan-desc">Class 11–12 · up to 6 students per batch</div>
+          <ul class="plan-features">
+            <li><i class="fas fa-check"></i> 4 sessions/week (1.5 hr each)</li>
+            <li><i class="fas fa-check"></i> Up to 3 subjects</li>
+            <li><i class="fas fa-check"></i> Doubt sessions included</li>
+            <li><i class="fas fa-check"></i> Monthly test &amp; performance analysis</li>
+            <li><i class="fas fa-check"></i> Session recordings</li>
+          </ul>
+          <a href="index.html#enroll" class="btn btn-outline">Join Batch</a>
+        </div>
+      </div>
+
+      <div id="g-offline" class="plans-grid" style="display:none;">
+        <div class="plan-card">
+          <div class="plan-label">Primary</div>
+          <div class="plan-price">₹400 <span>/ month</span></div>
+          <div class="plan-desc">Class 1–5 · Centre-based batch</div>
+          <ul class="plan-features">
+            <li><i class="fas fa-check"></i> Classroom at our centre</li>
+            <li><i class="fas fa-check"></i> 3 sessions/week (45 min)</li>
+            <li><i class="fas fa-check"></i> 1 subject</li>
+            <li><i class="fas fa-check"></i> Weekly quiz</li>
+          </ul>
+          <a href="index.html#enroll" class="btn btn-outline">Join Batch</a>
+        </div>
+        <div class="plan-card featured">
+          <div class="plan-label">Middle School ⭐ Best Value</div>
+          <div class="plan-price">₹700 <span>/ month</span></div>
+          <div class="plan-desc">Class 6–10 · Centre-based batch</div>
+          <ul class="plan-features">
+            <li><i class="fas fa-check"></i> Classroom at our centre</li>
+            <li><i class="fas fa-check"></i> 3 sessions/week (1 hr)</li>
+            <li><i class="fas fa-check"></i> 2 subjects</li>
+            <li><i class="fas fa-check"></i> Monthly test + report card</li>
+          </ul>
+          <a href="index.html#enroll" class="btn btn-primary">Join Batch</a>
+        </div>
+        <div class="plan-card">
+          <div class="plan-label">Senior Secondary</div>
+          <div class="plan-price">₹1,200 <span>/ month</span></div>
+          <div class="plan-desc">Class 11–12 · Centre-based batch</div>
+          <ul class="plan-features">
+            <li><i class="fas fa-check"></i> Classroom at our centre</li>
+            <li><i class="fas fa-check"></i> 4 sessions/week (1.5 hr)</li>
+            <li><i class="fas fa-check"></i> 3 subjects</li>
+            <li><i class="fas fa-check"></i> Monthly analysis + PYQ practice</li>
+          </ul>
+          <a href="index.html#enroll" class="btn btn-outline">Join Batch</a>
+        </div>
+      </div>
+
+      <!-- Batch schedule -->
+      <div style="margin-top:3rem;">
+        <div class="section-header"><h2>Current Batch <span class="highlight">Schedule</span></h2><p>Join an existing batch or request a new one</p></div>
+        <div style="overflow-x:auto;">
+          <table style="width:100%;border-collapse:collapse;background:#fff;border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);">
+            <thead style="background:var(--indigo);color:#fff;">
+              <tr><th style="padding:1rem;text-align:left;">Batch</th><th style="padding:1rem;">Class</th><th style="padding:1rem;">Subject</th><th style="padding:1rem;">Days</th><th style="padding:1rem;">Time</th><th style="padding:1rem;">Seats Left</th><th style="padding:1rem;">Action</th></tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:1rem;font-weight:600;">Batch A — Online</td>
+                <td style="padding:1rem;text-align:center;">10th</td>
+                <td style="padding:1rem;text-align:center;">Maths</td>
+                <td style="padding:1rem;text-align:center;">Mon / Wed / Fri</td>
+                <td style="padding:1rem;text-align:center;">5:00 PM</td>
+                <td style="padding:1rem;text-align:center;color:var(--green);font-weight:700;">3 Seats</td>
+                <td style="padding:1rem;text-align:center;"><a href="index.html#enroll" class="btn btn-primary" style="padding:.4rem 1rem;font-size:.82rem;">Join</a></td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);background:var(--bg);">
+                <td style="padding:1rem;font-weight:600;">Batch B — Online</td>
+                <td style="padding:1rem;text-align:center;">12th</td>
+                <td style="padding:1rem;text-align:center;">Physics</td>
+                <td style="padding:1rem;text-align:center;">Tue / Thu / Sat</td>
+                <td style="padding:1rem;text-align:center;">6:30 PM</td>
+                <td style="padding:1rem;text-align:center;color:var(--saffron);font-weight:700;">1 Seat</td>
+                <td style="padding:1rem;text-align:center;"><a href="index.html#enroll" class="btn btn-primary" style="padding:.4rem 1rem;font-size:.82rem;">Join</a></td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:1rem;font-weight:600;">Batch C — Offline</td>
+                <td style="padding:1rem;text-align:center;">8th</td>
+                <td style="padding:1rem;text-align:center;">Science</td>
+                <td style="padding:1rem;text-align:center;">Mon / Wed / Fri</td>
+                <td style="padding:1rem;text-align:center;">4:00 PM</td>
+                <td style="padding:1rem;text-align:center;color:var(--green);font-weight:700;">5 Seats</td>
+                <td style="padding:1rem;text-align:center;"><a href="index.html#enroll" class="btn btn-primary" style="padding:.4rem 1rem;font-size:.82rem;">Join</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-bottom"><p>&copy; 2026 Utkarsh Home Tuition. All rights reserved. | Made with <i class="fas fa-heart"></i> in India</p></div>
+  </footer>
+  <script src="main.js"></script>
+  <script>
+    function switchMode(btn, showId, hideId) {
+      document.getElementById(showId).style.display = 'grid';
+      document.getElementById(hideId).style.display = 'none';
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+  </script>
+</body>
+</html>

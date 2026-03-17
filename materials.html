@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Study Material — Utkarsh Home Tuition</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Baloo+2:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="logo"><span class="logo-icon"><i class="fas fa-graduation-cap"></i></span><div class="logo-text"><span class="logo-main">Utkarsh</span><span class="logo-sub">Home Tuition</span></div></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li class="dropdown"><a href="#">Classes <i class="fas fa-chevron-down"></i></a><div class="dropdown-menu"><a href="individual.html"><i class="fas fa-user"></i> Individual</a><a href="group.html"><i class="fas fa-users"></i> Group</a><div class="divider"></div><a href="online.html"><i class="fas fa-laptop"></i> Online</a><a href="offline.html"><i class="fas fa-chalkboard-teacher"></i> Offline</a></div></li>
+        <li class="dropdown"><a href="#">Study Store <i class="fas fa-chevron-down"></i></a><div class="dropdown-menu"><a href="notes.html"><i class="fas fa-book-open"></i> Notes</a><a href="materials.html"><i class="fas fa-file-alt"></i> Study Material</a><a href="tests.html"><i class="fas fa-clipboard-list"></i> Test Series</a></div></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+      <div class="nav-actions"><a href="tel:+919999999999" class="btn btn-outline"><i class="fas fa-phone"></i> Call Now</a><a href="index.html#enroll" class="btn btn-primary">Enroll Free</a></div>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <section class="page-hero">
+    <div class="container">
+      <div class="breadcrumb"><a href="index.html">Home</a><i class="fas fa-chevron-right"></i><a href="#">Store</a><i class="fas fa-chevron-right"></i><span>Study Material</span></div>
+      <h1><i class="fas fa-file-alt"></i> Study Material</h1>
+      <p>Comprehensive workbooks, PYQs, solved examples, shortcuts &amp; tips</p>
+    </div>
+    <div class="page-hero-wave"><svg viewBox="0 0 1440 60" preserveAspectRatio="none"><path d="M0,30 C480,60 960,0 1440,30 L1440,60 L0,60 Z" fill="#f8f9ff"/></svg></div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="filter-bar">
+        <label>Class:</label>
+        <button class="filter-btn active">All</button>
+        <button class="filter-btn">Class 9</button>
+        <button class="filter-btn">Class 10</button>
+        <button class="filter-btn">Class 11</button>
+        <button class="filter-btn">Class 12</button>
+      </div>
+
+      <div class="product-grid">
+        <div class="product-card">
+          <div class="product-thumb thumb-material"><i class="fas fa-file-alt" style="color:var(--blue);"></i></div>
+          <div class="product-body">
+            <div class="product-meta"><span class="product-class">Class 10</span><span class="product-subject">CBSE</span></div>
+            <h4>Maths — Workbook + PYQs</h4>
+            <p>Solved examples, exercise problems &amp; 10-year previous questions.</p>
+            <div class="product-footer"><span class="product-price">₹149</span><button class="product-buy" onclick="buyNow('Maths Class 10 Workbook','149')">Buy</button></div>
+          </div>
+        </div>
+        <div class="product-card">
+          <div class="product-thumb thumb-material"><i class="fas fa-flask" style="color:var(--blue);"></i></div>
+          <div class="product-body">
+            <div class="product-meta"><span class="product-class">Class 10</span><span class="product-subject">CBSE</span></div>
+            <h4>Science — Solved Examples</h4>
+            <p>Chapter-wise solved problems with tips, tricks &amp; diagrams.</p>
+            <div class="product-footer"><span class="product-price">₹149</span><button class="product-buy" onclick="buyNow('Science Class 10 Material','149')">Buy</button></div>
+          </div>
+        </div>
+        <div class="product-card">
+          <div class="product-thumb thumb-material"><i class="fas fa-atom" style="color:var(--blue);"></i></div>
+          <div class="product-body">
+            <div class="product-meta"><span class="product-class">Class 12</span><span class="product-subject">CBSE</span></div>
+            <h4>Chemistry — Reaction Handbook</h4>
+            <p>All important reactions, mechanisms &amp; named reactions compiled.</p>
+            <div class="product-footer"><span class="product-price">₹199</span><button class="product-buy" onclick="buyNow('Chemistry Class 12 Handbook','199')">Buy</button></div>
+          </div>
+        </div>
+        <div class="product-card">
+          <div class="product-thumb thumb-material"><i class="fas fa-square-root-alt" style="color:var(--blue);"></i></div>
+          <div class="product-body">
+            <div class="product-meta"><span class="product-class">Class 12</span><span class="product-subject">CBSE</span></div>
+            <h4>Maths — Formula &amp; Shortcut Book</h4>
+            <p>All formulas, shortcuts and derivation tips for boards &amp; JEE prep.</p>
+            <div class="product-footer"><span class="product-price">₹199</span><button class="product-buy" onclick="buyNow('Maths Class 12 Formula Book','199')">Buy</button></div>
+          </div>
+        </div>
+        <div class="product-card">
+          <div class="product-thumb thumb-material"><i class="fas fa-book" style="color:var(--blue);"></i></div>
+          <div class="product-body">
+            <div class="product-meta"><span class="product-class">Class 9</span><span class="product-subject">CBSE</span></div>
+            <h4>English — Grammar Workbook</h4>
+            <p>Comprehensive grammar exercises, writing formats &amp; comprehension.</p>
+            <div class="product-footer"><span class="product-price">₹129</span><button class="product-buy" onclick="buyNow('English Class 9 Workbook','129')">Buy</button></div>
+          </div>
+        </div>
+        <div class="product-card">
+          <div class="product-thumb thumb-material"><i class="fas fa-globe-asia" style="color:var(--blue);"></i></div>
+          <div class="product-body">
+            <div class="product-meta"><span class="product-class">Class 10</span><span class="product-subject">CBSE</span></div>
+            <h4>SST — Map Work + PYQs</h4>
+            <p>All important maps, MCQs &amp; previous year board questions with answers.</p>
+            <div class="product-footer"><span class="product-price">₹149</span><button class="product-buy" onclick="buyNow('SST Class 10 Material','149')">Buy</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Full bundle -->
+      <div style="margin-top:3rem;background:linear-gradient(135deg,#2563EB,#1D4ED8);border-radius:var(--radius-lg);padding:2.5rem;text-align:center;color:#fff;">
+        <h3 style="color:#fff;margin-bottom:.5rem;">📚 Subject Bundle — Save 35%!</h3>
+        <p style="color:rgba(255,255,255,.8);margin-bottom:1.5rem;">Notes + Study Material + Test Series for one subject</p>
+        <div style="display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;">
+          <button class="btn" style="background:var(--saffron);color:#fff;" onclick="buyNow('Maths Complete Bundle (Class 10)','799')">Maths Class 10 — ₹799</button>
+          <button class="btn" style="background:var(--saffron);color:#fff;" onclick="buyNow('Science Complete Bundle (Class 10)','799')">Science Class 10 — ₹799</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="buy-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;">
+    <div style="background:#fff;border-radius:var(--radius-lg);padding:2rem;max-width:420px;width:90%;text-align:center;">
+      <h3 id="modal-title" style="margin-bottom:.5rem;"></h3>
+      <p style="color:var(--text-mid);font-size:.9rem;margin-bottom:1.5rem;">Complete payment via WhatsApp. PDF will be delivered instantly.</p>
+      <div style="display:flex;gap:.75rem;justify-content:center;">
+        <a id="modal-wa" href="#" class="btn btn-primary" style="background:linear-gradient(135deg,#25D366,#1a9a4e);"><i class="fab fa-whatsapp"></i> Pay via WhatsApp</a>
+        <button class="btn btn-outline" onclick="document.getElementById('buy-modal').style.display='none'">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer"><div class="footer-bottom"><p>&copy; 2026 Utkarsh Home Tuition. All rights reserved. | Made with <i class="fas fa-heart"></i> in India</p></div></footer>
+  <script src="main.js"></script>
+  <script>
+    function buyNow(name, price) {
+      document.getElementById('modal-title').textContent = name + ' — ₹' + price;
+      const msg = encodeURIComponent('Hi! I want to buy ' + name + ' (₹' + price + '). Please share payment link.');
+      document.getElementById('modal-wa').href = 'https://wa.me/919999999999?text=' + msg;
+      document.getElementById('buy-modal').style.display = 'flex';
+    }
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.closest('.filter-bar').querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

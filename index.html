@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Utkarsh Home Tuition — Expert Tuition at Your Doorstep</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Baloo+2:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+
+  <!-- Scroll Progress Bar -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Lead Popup Modal -->
+  <div class="popup-overlay" id="leadPopup">
+    <div class="popup-card">
+      <button class="popup-close" id="popupClose"><i class="fas fa-times"></i></button>
+      <div class="popup-icon"><i class="fas fa-graduation-cap"></i></div>
+      <h3>Get a FREE Demo Class!</h3>
+      <p>Join 500+ students already learning with Utkarsh. No commitment needed.</p>
+      <form class="popup-form" id="popupForm">
+        <div class="input-group">
+          <i class="fas fa-user"></i>
+          <input type="text" placeholder="Student's Name *" required />
+        </div>
+        <div class="input-group">
+          <i class="fas fa-phone"></i>
+          <input type="tel" placeholder="WhatsApp Number *" required pattern="[0-9]{10}" maxlength="10" />
+        </div>
+        <div class="input-group">
+          <i class="fas fa-book"></i>
+          <select required>
+            <option value="" disabled selected>Select Class</option>
+            <option>Class 1-5</option>
+            <option>Class 6-8</option>
+            <option>Class 9-10</option>
+            <option>Class 11-12</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full ripple">
+          <i class="fab fa-whatsapp"></i> Book Free Demo Now
+        </button>
+      </form>
+      <p class="popup-note"><i class="fas fa-shield-alt"></i> We never spam. Your number is safe with us.</p>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-icon"><i class="fas fa-graduation-cap"></i></span>
+        <div>
+          <span class="logo-main">Utkarsh</span>
+          <span class="logo-sub">Home Tuition</span>
+        </div>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home" class="nav-link">Home</a></li>
+        <li class="dropdown">
+          <a href="#classes" class="nav-link">Classes <i class="fas fa-chevron-down"></i></a>
+          <div class="dropdown-menu">
+            <a href="individual.html"><i class="fas fa-user"></i> Individual Tuition</a>
+            <a href="group.html"><i class="fas fa-users"></i> Group Tuition</a>
+            <div class="divider"></div>
+            <a href="online.html"><i class="fas fa-laptop"></i> Online Classes</a>
+            <a href="offline.html"><i class="fas fa-chalkboard-teacher"></i> Offline / Home Visit</a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="#store" class="nav-link">Study Store <i class="fas fa-chevron-down"></i></a>
+          <div class="dropdown-menu">
+            <a href="notes.html"><i class="fas fa-book-open"></i> Notes</a>
+            <a href="materials.html"><i class="fas fa-file-alt"></i> Study Material</a>
+            <a href="tests.html"><i class="fas fa-clipboard-list"></i> Test Series</a>
+          </div>
+        </li>
+        <li><a href="#why" class="nav-link">About</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="tel:+919999999999" class="btn btn-ghost"><i class="fas fa-phone-alt"></i> Call Now</a>
+        <button class="btn btn-primary ripple" onclick="openPopup()">Book Free Demo</button>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-particles" id="heroParticles"></div>
+    <div class="container hero-inner">
+      <div class="hero-content" data-aos="fade-right">
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          <span>Now Enrolling &mdash; Batch Starts Soon!</span>
+        </div>
+        <h1>
+          Expert Tuition<br />
+          <span class="typewriter-wrap">
+            <span class="typewriter" id="typewriter"></span><span class="cursor-blink">|</span>
+          </span>
+        </h1>
+        <p class="hero-sub">
+          Quality education from Class 1&ndash;12. Individual &amp; Group, Online &amp; Offline.<br />
+          CBSE &middot; ICSE &middot; State Board &mdash; all subjects covered.
+        </p>
+        <div class="hero-pills">
+          <span><i class="fas fa-check-circle"></i> Verified Teachers</span>
+          <span><i class="fas fa-check-circle"></i> Affordable Fees</span>
+          <span><i class="fas fa-check-circle"></i> Hindi &amp; English Medium</span>
+        </div>
+        <div class="hero-cta">
+          <button class="btn btn-primary btn-lg ripple" onclick="openPopup()">
+            <i class="fas fa-rocket"></i> Book FREE Demo
+          </button>
+          <a href="#classes" class="btn btn-glass btn-lg">
+            <i class="fas fa-compass"></i> Explore Classes
+          </a>
+        </div>
+        <div class="hero-trust">
+          <div class="trust-avatars">
+            <span class="avatar">RS</span>
+            <span class="avatar">AK</span>
+            <span class="avatar">PG</span>
+            <span class="avatar">MV</span>
+          </div>
+          <span>500+ students trust us</span>
+        </div>
+      </div>
+
+      <div class="hero-right" data-aos="fade-left">
+        <div class="hero-card glass-card">
+          <div class="hero-stats">
+            <div class="hstat">
+              <div class="hstat-num-wrap"><span class="counter hstat-num" data-target="500">0</span><span class="hstat-plus">+</span></div>
+              <span class="hstat-label">Students</span>
+            </div>
+            <div class="hstat-divider"></div>
+            <div class="hstat">
+              <div class="hstat-num-wrap"><span class="counter hstat-num" data-target="50">0</span><span class="hstat-plus">+</span></div>
+              <span class="hstat-label">Teachers</span>
+            </div>
+            <div class="hstat-divider"></div>
+            <div class="hstat">
+              <div class="hstat-num-wrap"><span class="counter hstat-num" data-target="10">0</span><span class="hstat-plus">+</span></div>
+              <span class="hstat-label">Yrs Exp.</span>
+            </div>
+          </div>
+          <div class="subject-grid">
+            <div class="sub-chip"><i class="fas fa-square-root-alt"></i> Maths</div>
+            <div class="sub-chip"><i class="fas fa-flask"></i> Science</div>
+            <div class="sub-chip"><i class="fas fa-book"></i> English</div>
+            <div class="sub-chip"><i class="fas fa-language"></i> Hindi</div>
+            <div class="sub-chip"><i class="fas fa-globe-asia"></i> SST</div>
+            <div class="sub-chip"><i class="fas fa-laptop-code"></i> Computer</div>
+          </div>
+          <div class="rating-bar">
+            <div class="stars">
+              <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+              <i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+            </div>
+            <span>4.8 / 5 from 200+ reviews</span>
+          </div>
+          <form class="hero-mini-form" id="heroMiniForm">
+            <p class="mini-form-label"><i class="fas fa-bolt"></i> Quick Enquiry</p>
+            <div class="mini-form-row">
+              <input type="tel" placeholder="WhatsApp Number" maxlength="10" required />
+              <button type="submit" class="btn btn-primary ripple">Go <i class="fas fa-arrow-right"></i></button>
+            </div>
+          </form>
+        </div>
+        <div class="float-badge float-badge-1"><i class="fas fa-shield-alt"></i> Background Verified</div>
+        <div class="float-badge float-badge-2"><i class="fab fa-whatsapp"></i> Doubt on WhatsApp</div>
+      </div>
+    </div>
+    <div class="hero-wave">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none">
+        <path d="M0,50 C300,100 900,0 1440,60 L1440,100 L0,100 Z" fill="var(--bg)"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- CLASSES -->
+  <section class="section" id="classes">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <span class="section-badge">Our Classes</span>
+        <h2>Choose What Works for <span class="highlight">You</span></h2>
+        <p>Flexible formats designed around every student's needs &amp; budget</p>
+      </div>
+      <div class="mode-tabs" data-aos="fade-up">
+        <button class="mode-tab active" data-mode="all">All</button>
+        <button class="mode-tab" data-mode="individual">Individual</button>
+        <button class="mode-tab" data-mode="group">Group</button>
+        <button class="mode-tab" data-mode="online">Online</button>
+        <button class="mode-tab" data-mode="offline">Offline</button>
+      </div>
+      <div class="classes-grid" id="classesGrid">
+        <a href="individual.html" class="class-card" data-mode="individual" data-aos="fade-up" data-aos-delay="0">
+          <div class="card-glow card-glow-indigo"></div>
+          <div class="card-icon-wrap indigo-icon"><i class="fas fa-user-graduate"></i></div>
+          <h3>Individual Tuition</h3>
+          <p>One-on-one sessions tailored completely to your child's pace and syllabus.</p>
+          <ul class="card-features">
+            <li><i class="fas fa-check"></i> Personalised lesson plan</li>
+            <li><i class="fas fa-check"></i> Flexible timing</li>
+            <li><i class="fas fa-check"></i> 100% dedicated attention</li>
+          </ul>
+          <div class="card-footer-row">
+            <span class="card-price">From <strong>&#8377;800</strong>/mo</span>
+            <span class="card-arrow"><i class="fas fa-arrow-right"></i></span>
+          </div>
+        </a>
+        <a href="group.html" class="class-card card-featured" data-mode="group" data-aos="fade-up" data-aos-delay="80">
+          <div class="featured-ribbon">Best Value</div>
+          <div class="card-glow card-glow-saffron"></div>
+          <div class="card-icon-wrap saffron-icon"><i class="fas fa-users"></i></div>
+          <h3>Group Tuition</h3>
+          <p>Small batch (4&ndash;8 students) &mdash; collaborative, affordable &amp; competitive.</p>
+          <ul class="card-features">
+            <li><i class="fas fa-check"></i> Peer learning</li>
+            <li><i class="fas fa-check"></i> Budget-friendly fees</li>
+            <li><i class="fas fa-check"></i> Healthy competition</li>
+          </ul>
+          <div class="card-footer-row">
+            <span class="card-price">From <strong>&#8377;300</strong>/mo</span>
+            <span class="card-arrow"><i class="fas fa-arrow-right"></i></span>
+          </div>
+        </a>
+        <a href="online.html" class="class-card" data-mode="online" data-aos="fade-up" data-aos-delay="160">
+          <div class="card-glow card-glow-blue"></div>
+          <div class="card-icon-wrap blue-icon"><i class="fas fa-laptop"></i></div>
+          <h3>Online Classes</h3>
+          <p>Live interactive sessions from home &mdash; available across India.</p>
+          <ul class="card-features">
+            <li><i class="fas fa-check"></i> Live video sessions</li>
+            <li><i class="fas fa-check"></i> Recorded lectures</li>
+            <li><i class="fas fa-check"></i> Pan-India access</li>
+          </ul>
+          <div class="card-footer-row">
+            <span class="card-price">From <strong>&#8377;500</strong>/mo</span>
+            <span class="card-arrow"><i class="fas fa-arrow-right"></i></span>
+          </div>
+        </a>
+        <a href="offline.html" class="class-card" data-mode="offline" data-aos="fade-up" data-aos-delay="240">
+          <div class="card-glow card-glow-green"></div>
+          <div class="card-icon-wrap green-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+          <h3>Home Visit / Offline</h3>
+          <p>Teacher visits your home &mdash; traditional face-to-face learning.</p>
+          <ul class="card-features">
+            <li><i class="fas fa-check"></i> Teacher at your door</li>
+            <li><i class="fas fa-check"></i> No travel needed</li>
+            <li><i class="fas fa-check"></i> Best retention</li>
+          </ul>
+          <div class="card-footer-row">
+            <span class="card-price">From <strong>&#8377;1000</strong>/mo</span>
+            <span class="card-arrow"><i class="fas fa-arrow-right"></i></span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- STUDY STORE -->
+  <section class="section store-section" id="store">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <span class="section-badge">Study Store</span>
+        <h2>Everything You Need to <span class="highlight">Excel</span></h2>
+        <p>Buy only what you need &mdash; PDFs delivered on WhatsApp instantly</p>
+      </div>
+      <div class="store-grid">
+        <div class="store-card" data-aos="fade-up" data-aos-delay="0">
+          <div class="store-icon-wrap notes-icon"><i class="fas fa-book-open"></i></div>
+          <h3>Notes</h3>
+          <p>Chapter-wise concise notes for Class 6&ndash;12, CBSE / ICSE / State Board.</p>
+          <div class="store-tags">
+            <span><i class="fas fa-file-pdf"></i> PDF</span>
+            <span><i class="fas fa-mobile-alt"></i> Mobile Friendly</span>
+            <span><i class="fas fa-infinity"></i> Lifetime Access</span>
+          </div>
+          <div class="store-pricing">
+            <div class="price-pill">&#8377;49 <small>/ chapter</small></div>
+            <div class="price-pill price-full">&#8377;299 <small>full subject</small></div>
+          </div>
+          <a href="notes.html" class="btn btn-primary btn-full ripple">Browse Notes</a>
+        </div>
+        <div class="store-card store-featured" data-aos="fade-up" data-aos-delay="100">
+          <div class="store-crown"><i class="fas fa-crown"></i> Most Popular</div>
+          <div class="store-icon-wrap material-icon"><i class="fas fa-file-alt"></i></div>
+          <h3>Study Material</h3>
+          <p>Workbooks, solved examples, PYQs, shortcuts &amp; tips by expert teachers.</p>
+          <div class="store-tags">
+            <span><i class="fas fa-tasks"></i> Solved Examples</span>
+            <span><i class="fas fa-history"></i> PYQs</span>
+            <span><i class="fas fa-lightbulb"></i> Tricks &amp; Tips</span>
+          </div>
+          <div class="store-pricing">
+            <div class="price-pill">&#8377;149 <small>/ subject</small></div>
+            <div class="price-pill price-full">&#8377;799 <small>full bundle</small></div>
+          </div>
+          <a href="materials.html" class="btn btn-white btn-full ripple">Get Materials</a>
+        </div>
+        <div class="store-card" data-aos="fade-up" data-aos-delay="200">
+          <div class="store-icon-wrap test-icon"><i class="fas fa-clipboard-list"></i></div>
+          <h3>Test Series</h3>
+          <p>Weekly, monthly &amp; full mock tests with analytics and leaderboard.</p>
+          <div class="store-tags">
+            <span><i class="fas fa-chart-bar"></i> Analytics</span>
+            <span><i class="fas fa-redo"></i> Reattempt</span>
+            <span><i class="fas fa-trophy"></i> Leaderboard</span>
+          </div>
+          <div class="store-pricing">
+            <div class="price-pill">&#8377;99 <small>/ 5 tests</small></div>
+            <div class="price-pill price-full">&#8377;499 <small>full series</small></div>
+          </div>
+          <a href="tests.html" class="btn btn-primary btn-full ripple">Start Practice</a>
+        </div>
+      </div>
+      <div class="payment-strip" data-aos="fade-up">
+        <span><i class="fas fa-lock"></i> 100% Secure Payments via</span>
+        <div class="pay-icons">
+          <span class="pay-badge">UPI</span>
+          <span class="pay-badge">Paytm</span>
+          <span class="pay-badge">Google Pay</span>
+          <span class="pay-badge">PhonePe</span>
+          <span class="pay-badge">Net Banking</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY US -->
+  <section class="section why-section" id="why">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <span class="section-badge">Why Utkarsh?</span>
+        <h2>What Makes Us <span class="highlight">Different</span></h2>
+      </div>
+      <div class="why-grid">
+        <div class="why-card" data-aos="zoom-in" data-aos-delay="0"><div class="why-icon"><i class="fas fa-user-tie"></i></div><h4>Verified Teachers</h4><p>Background-checked, B.Ed or subject-qualified, demo-tested before onboarding.</p></div>
+        <div class="why-card" data-aos="zoom-in" data-aos-delay="60"><div class="why-icon"><i class="fas fa-rupee-sign"></i></div><h4>Affordable Fees</h4><p>Transparent pricing, zero hidden charges. EMI options available.</p></div>
+        <div class="why-card" data-aos="zoom-in" data-aos-delay="120"><div class="why-icon"><i class="fas fa-clock"></i></div><h4>Flexible Timings</h4><p>Morning, evening, weekends &mdash; schedule as per your convenience.</p></div>
+        <div class="why-card" data-aos="zoom-in" data-aos-delay="180"><div class="why-icon"><i class="fas fa-chart-line"></i></div><h4>Progress Reports</h4><p>Monthly performance reports shared with parents via WhatsApp.</p></div>
+        <div class="why-card" data-aos="zoom-in" data-aos-delay="240"><div class="why-icon"><i class="fas fa-language"></i></div><h4>Hindi &amp; English Medium</h4><p>Teaching in Hindi and English as per student comfort.</p></div>
+        <div class="why-card" data-aos="zoom-in" data-aos-delay="300"><div class="why-icon"><i class="fas fa-headset"></i></div><h4>7-Day Doubt Support</h4><p>WhatsApp doubt support available daily &mdash; even between classes.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section testi-section">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <span class="section-badge">Reviews</span>
+        <h2>Parents &amp; Students <span class="highlight">Love Us</span></h2>
+      </div>
+      <div class="testi-slider">
+        <div class="testi-track" id="testiTrack">
+          <div class="testi-card">
+            <div class="testi-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+            <p>"Mere bete ka result bahut improve hua! Teacher bahut patient hain. Highly recommended for all parents!"</p>
+            <div class="testi-author"><span class="t-av" style="background:var(--indigo)">RS</span><div><strong>Rekha Sharma</strong><small>Parent &middot; Class 8, Delhi</small></div></div>
+          </div>
+          <div class="testi-card testi-highlight">
+            <div class="testi-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+            <p>"Got 94% in boards! The test series was a game changer. Notes were very concise and easy to revise. Best decision!"</p>
+            <div class="testi-author"><span class="t-av" style="background:var(--saffron)">AK</span><div><strong>Arjun Kumar</strong><small>Student &middot; Class 12, UP</small></div></div>
+          </div>
+          <div class="testi-card">
+            <div class="testi-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></div>
+            <p>"Online classes were super smooth. My daughter's confidence in Maths improved a lot. Fees are very reasonable!"</p>
+            <div class="testi-author"><span class="t-av" style="background:var(--green)">PG</span><div><strong>Priya Gupta</strong><small>Parent &middot; Class 10, Lucknow</small></div></div>
+          </div>
+          <div class="testi-card">
+            <div class="testi-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+            <p>"Teacher explains in Hindi which makes it easy for my son to understand. Very dedicated. 10/10!"</p>
+            <div class="testi-author"><span class="t-av" style="background:var(--blue)">MV</span><div><strong>Manoj Verma</strong><small>Parent &middot; Class 9, Kanpur</small></div></div>
+          </div>
+        </div>
+        <div class="testi-nav">
+          <button class="testi-btn" id="testiPrev"><i class="fas fa-chevron-left"></i></button>
+          <div class="testi-dots" id="testiDots"></div>
+          <button class="testi-btn" id="testiNext"><i class="fas fa-chevron-right"></i></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEAD CAPTURE FORM -->
+  <section class="section lead-section" id="enroll">
+    <div class="container">
+      <div class="lead-wrapper" data-aos="fade-up">
+        <div class="lead-left">
+          <span class="section-badge">Free Demo</span>
+          <h2>Book Your FREE<br /><span class="highlight">Demo Class Today!</span></h2>
+          <p>Fill the form &mdash; our team will call within 30 minutes to schedule your demo.</p>
+          <ul class="lead-perks">
+            <li><i class="fas fa-check-circle"></i> No payment needed for demo</li>
+            <li><i class="fas fa-check-circle"></i> Choose your preferred time &amp; subject</li>
+            <li><i class="fas fa-check-circle"></i> Get matched with the right teacher</li>
+            <li><i class="fas fa-check-circle"></i> Decide after demo &mdash; zero pressure</li>
+          </ul>
+          <div class="lead-contact-quick">
+            <a href="tel:+919999999999" class="quick-link"><i class="fas fa-phone-alt"></i> +91 99999 99999</a>
+            <a href="https://wa.me/919999999999" class="quick-link whatsapp-link" target="_blank"><i class="fab fa-whatsapp"></i> Chat on WhatsApp</a>
+          </div>
+        </div>
+        <div class="lead-right">
+          <div class="lead-form-card">
+            <h4><i class="fas fa-graduation-cap"></i> Enrolment Form</h4>
+            <form class="lead-form" id="leadForm">
+              <div class="form-group">
+                <label>Student's Full Name *</label>
+                <div class="input-wrap"><i class="fas fa-user"></i><input type="text" name="name" placeholder="e.g. Rahul Sharma" required /></div>
+                <span class="field-error" id="err-name"></span>
+              </div>
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label>Class *</label>
+                  <div class="input-wrap"><i class="fas fa-layer-group"></i>
+                    <select name="class" required>
+                      <option value="" disabled selected>Select</option>
+                      <option>Class 1</option><option>Class 2</option><option>Class 3</option>
+                      <option>Class 4</option><option>Class 5</option><option>Class 6</option>
+                      <option>Class 7</option><option>Class 8</option><option>Class 9</option>
+                      <option>Class 10</option><option>Class 11</option><option>Class 12</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Board *</label>
+                  <div class="input-wrap"><i class="fas fa-school"></i>
+                    <select name="board" required>
+                      <option value="" disabled selected>Select</option>
+                      <option>CBSE</option><option>ICSE</option><option>State Board</option><option>Other</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Subject(s) Needed *</label>
+                <div class="subject-checkboxes">
+                  <label class="check-pill"><input type="checkbox" name="subject" value="Maths" /> Maths</label>
+                  <label class="check-pill"><input type="checkbox" name="subject" value="Science" /> Science</label>
+                  <label class="check-pill"><input type="checkbox" name="subject" value="English" /> English</label>
+                  <label class="check-pill"><input type="checkbox" name="subject" value="Hindi" /> Hindi</label>
+                  <label class="check-pill"><input type="checkbox" name="subject" value="SST" /> SST</label>
+                  <label class="check-pill"><input type="checkbox" name="subject" value="Computer" /> Computer</label>
+                </div>
+              </div>
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label>Mode *</label>
+                  <div class="input-wrap"><i class="fas fa-sliders-h"></i>
+                    <select name="mode" required>
+                      <option value="" disabled selected>Select</option>
+                      <option>Individual &mdash; Online</option>
+                      <option>Individual &mdash; Offline</option>
+                      <option>Group &mdash; Online</option>
+                      <option>Group &mdash; Offline</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Preferred Time *</label>
+                  <div class="input-wrap"><i class="fas fa-clock"></i>
+                    <select name="time" required>
+                      <option value="" disabled selected>Select</option>
+                      <option>Morning (7-10 AM)</option>
+                      <option>Afternoon (12-3 PM)</option>
+                      <option>Evening (4-7 PM)</option>
+                      <option>Night (7-9 PM)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Parent's WhatsApp Number *</label>
+                <div class="input-wrap"><i class="fab fa-whatsapp"></i><input type="tel" name="phone" placeholder="10-digit mobile number" maxlength="10" required pattern="[0-9]{10}" /></div>
+                <span class="field-error" id="err-phone"></span>
+              </div>
+              <div class="form-group">
+                <label>City / Area</label>
+                <div class="input-wrap"><i class="fas fa-map-marker-alt"></i><input type="text" name="city" placeholder="e.g. Lucknow, Gomti Nagar" /></div>
+              </div>
+              <div class="form-group">
+                <label>Additional Message</label>
+                <div class="input-wrap textarea-wrap"><i class="fas fa-comment-alt"></i><textarea name="message" rows="3" placeholder="Any specific requirements or questions..."></textarea></div>
+              </div>
+              <button type="submit" class="btn btn-primary btn-full btn-xl ripple" id="submitBtn">
+                <i class="fab fa-whatsapp"></i> Book FREE Demo on WhatsApp
+              </button>
+              <p class="form-note"><i class="fas fa-shield-alt"></i> 100% confidential. We'll call within 30 mins.</p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section faq-section" id="faq">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <span class="section-badge">FAQ</span>
+        <h2>Common <span class="highlight">Questions</span></h2>
+      </div>
+      <div class="faq-list" data-aos="fade-up">
+        <div class="faq-item">
+          <button class="faq-q">How do I book a demo class? <i class="fas fa-chevron-down faq-icon"></i></button>
+          <div class="faq-a"><p>Simply fill the enrolment form above or click "Book Free Demo". Our team will call you within 30 minutes to schedule a convenient slot.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">What is the difference between Individual and Group tuition? <i class="fas fa-chevron-down faq-icon"></i></button>
+          <div class="faq-a"><p>Individual tuition is 1-on-1 with full teacher attention and custom pace. Group tuition has 4&ndash;8 students in a batch &mdash; more affordable with a competitive peer environment.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">Is online tuition as effective as offline? <i class="fas fa-chevron-down faq-icon"></i></button>
+          <div class="faq-a"><p>Yes! Our online sessions are live and interactive via Zoom/Google Meet. Students get recorded sessions too. Many students have achieved 90%+ marks with our online mode.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">Can I buy study materials without enrolling in classes? <i class="fas fa-chevron-down faq-icon"></i></button>
+          <div class="faq-a"><p>Absolutely. Notes, Study Material and Test Series are available for individual purchase in our Study Store. No class enrollment required.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">What payment methods are accepted? <i class="fas fa-chevron-down faq-icon"></i></button>
+          <div class="faq-a"><p>We accept UPI, Paytm, Google Pay, PhonePe, and bank transfer. Monthly and quarterly payment options available. No hidden fees.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">What if I am not satisfied with the teacher? <i class="fas fa-chevron-down faq-icon"></i></button>
+          <div class="faq-a"><p>We offer a free teacher replacement &mdash; no questions asked. Your satisfaction and your child's learning is our top priority.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section contact-section" id="contact">
+    <div class="container contact-grid">
+      <div class="contact-info" data-aos="fade-right">
+        <span class="section-badge">Contact Us</span>
+        <h2>Let's Get <span class="highlight">Connected</span></h2>
+        <div class="contact-items">
+          <div class="ci"><div class="ci-icon"><i class="fas fa-phone-alt"></i></div><div><strong>Call / WhatsApp</strong><a href="tel:+919999999999">+91 99999 99999</a></div></div>
+          <div class="ci"><div class="ci-icon ci-wa"><i class="fab fa-whatsapp"></i></div><div><strong>WhatsApp Chat</strong><a href="https://wa.me/919999999999" target="_blank">Message Us Now</a></div></div>
+          <div class="ci"><div class="ci-icon ci-loc"><i class="fas fa-map-marker-alt"></i></div><div><strong>Service Area</strong><span>Delhi NCR, Lucknow &amp; Online &mdash; Pan India</span></div></div>
+          <div class="ci"><div class="ci-icon ci-time"><i class="fas fa-clock"></i></div><div><strong>Available</strong><span>Mon&ndash;Sat: 7 AM &ndash; 9 PM</span></div></div>
+        </div>
+        <div class="social-row">
+          <a href="#" class="social-btn yt"><i class="fab fa-youtube"></i></a>
+          <a href="#" class="social-btn ig"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-btn fb"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-btn tg"><i class="fab fa-telegram-plane"></i></a>
+        </div>
+      </div>
+      <div class="contact-form-card" data-aos="fade-left">
+        <h4><i class="fas fa-envelope"></i> Send a Quick Message</h4>
+        <form class="contact-form" id="contactForm">
+          <div class="input-wrap"><i class="fas fa-user"></i><input type="text" placeholder="Your Name *" required /></div>
+          <div class="input-wrap"><i class="fas fa-phone"></i><input type="tel" placeholder="Phone / WhatsApp *" maxlength="10" required /></div>
+          <div class="input-wrap"><i class="fas fa-comment-alt"></i><textarea rows="4" placeholder="Your message or question..."></textarea></div>
+          <button type="submit" class="btn btn-primary btn-full ripple"><i class="fab fa-whatsapp"></i> Send on WhatsApp</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <div class="logo">
+          <span class="logo-icon"><i class="fas fa-graduation-cap"></i></span>
+          <div><span class="logo-main">Utkarsh Home Tuition</span><span class="footer-tag">Shiksha se Utkarsh tak</span></div>
+        </div>
+        <p>Quality home tuition for Class 1&ndash;12. Helping students achieve their full potential since 2015.</p>
+        <div class="social-row">
+          <a href="#" class="social-btn-sm"><i class="fab fa-youtube"></i></a>
+          <a href="#" class="social-btn-sm"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-btn-sm"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-btn-sm"><i class="fab fa-telegram-plane"></i></a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col"><h5>Classes</h5><a href="individual.html">Individual Tuition</a><a href="group.html">Group Tuition</a><a href="online.html">Online Classes</a><a href="offline.html">Offline / Home Visit</a></div>
+        <div class="footer-col"><h5>Study Store</h5><a href="notes.html">Notes</a><a href="materials.html">Study Material</a><a href="tests.html">Test Series</a></div>
+        <div class="footer-col"><h5>Quick Links</h5><a href="#why">About Us</a><a href="#faq">FAQ</a><a href="#contact">Contact</a><a href="#">Privacy Policy</a><a href="#">Refund Policy</a></div>
+      </div>
+    </div>
+    <div class="footer-bottom"><p>&copy; 2026 Utkarsh Home Tuition &middot; Made with <i class="fas fa-heart"></i> in India</p></div>
+  </footer>
+
+  <!-- Floating WhatsApp Button -->
+  <a href="https://wa.me/919999999999?text=Hi!%20I%20want%20to%20know%20more%20about%20Utkarsh%20Home%20Tuition." class="wa-float" target="_blank" aria-label="Chat on WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+    <span class="wa-tooltip">Chat with us!</span>
+    <span class="wa-pulse"></span>
+  </a>
+
+  <!-- Back to Top -->
+  <button class="back-top" id="backTop" aria-label="Back to top"><i class="fas fa-arrow-up"></i></button>
+
+  <!-- Sticky Demo CTA (mobile) -->
+  <div class="sticky-cta" id="stickyCta">
+    <button class="btn btn-primary btn-full ripple" onclick="openPopup()">
+      <i class="fas fa-graduation-cap"></i> Book FREE Demo Class
+    </button>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>
