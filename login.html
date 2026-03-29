@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login — Utkarsh Home Tuition</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="auth-shell">
+  <div class="toast-container" id="toastContainer"></div>
+
+  <main class="auth-wrap">
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
+
+    <section class="auth-card">
+      <p class="eyebrow">Welcome Back</p>
+      <h1>Login Panel</h1>
+      <p class="auth-sub">Access your dashboard for classes, updates, and onboarding progress.</p>
+
+      <div class="role-switch" id="roleSwitch">
+        <button type="button" class="active" data-role="student">Student</button>
+        <button type="button" data-role="teacher">Teacher</button>
+        <button type="button" data-role="admin">Admin</button>
+      </div>
+
+      <div class="role-help" id="roleHelp">Student mode: track classes, schedules, and progress.</div>
+
+      <form id="loginForm" novalidate>
+        <input type="hidden" name="role" id="loginRole" value="student" />
+
+        <label class="field">
+          <span id="identifierLabel">Email or Phone *</span>
+          <input type="text" name="identifier" required placeholder="Enter email or 10-digit phone" />
+        </label>
+
+        <label class="field">
+          <span>Password *</span>
+          <div class="password-wrap">
+            <input type="password" name="password" required minlength="6" placeholder="Enter password" />
+            <button type="button" class="toggle-pass" data-toggle-password>
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+        </label>
+
+        <div class="auth-row">
+          <label><input type="checkbox" /> Remember me</label>
+          <a href="#">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full" id="loginBtn">Login Securely</button>
+      </form>
+
+      <div class="auth-links">
+        <a href="student-onboarding.html">New student? Start onboarding</a>
+        <a href="teacher-onboarding.html">Join as teacher</a>
+        <a href="admin-panel.html">Admin? Open control panel UI</a>
+      </div>
+
+      <div class="success-card" id="loginSuccess" hidden>
+        <i class="fas fa-circle-check"></i>
+        <h3>Login Successful</h3>
+        <p>UI flow validated. Backend authentication will be connected in Next.js phase.</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="main.js"></script>
+</body>
+</html>

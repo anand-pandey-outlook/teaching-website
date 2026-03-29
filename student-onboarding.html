@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Onboarding — Utkarsh Home Tuition</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="auth-shell onboarding-page">
+  <div class="toast-container" id="toastContainer"></div>
+
+  <main class="onboard-modal-wrap">
+    <section class="wizard-card onboard-modal">
+      <header class="onboard-head">
+        <div>
+          <p class="eyebrow">Student Onboarding</p>
+          <h1>Start Your Learning Journey</h1>
+        </div>
+        <a href="index.html" class="btn btn-soft btn-sm"><i class="fas fa-times"></i> Close</a>
+      </header>
+
+      <div class="onboard-grid">
+        <aside class="onboard-side">
+          <h3>What happens next?</h3>
+          <ul>
+            <li><i class="fas fa-check-circle"></i> Academic counselor reviews details.</li>
+            <li><i class="fas fa-check-circle"></i> Demo teacher shortlist shared.</li>
+            <li><i class="fas fa-check-circle"></i> Schedule is finalized with parent.</li>
+          </ul>
+          <div class="onboard-side-note">
+            <strong>Need quick support?</strong>
+            <p>Our team is available on WhatsApp 7 days a week.</p>
+          </div>
+        </aside>
+
+        <div class="onboard-content">
+          <div class="wizard-top">
+            <p>Just 4 quick steps and our team will assign the best-fit teacher.</p>
+            <div class="wizard-progress">
+              <div class="wizard-progress-bar" id="studentProgress"></div>
+            </div>
+            <div class="wizard-steps">
+              <span class="active">Profile</span>
+              <span>Academics</span>
+              <span>Preferences</span>
+              <span>Guardian</span>
+            </div>
+          </div>
+
+          <form id="studentWizard" class="wizard-form" novalidate>
+            <section class="form-step active" data-step="0">
+              <div class="field-grid two">
+                <label class="field"><span>Student Name *</span><input type="text" name="studentName" required minlength="2" /></label>
+                <label class="field"><span>Date of Birth *</span><input type="date" name="dob" required /></label>
+              </div>
+              <div class="field-grid two">
+                <label class="field"><span>Gender *</span>
+                  <select name="gender" required>
+                    <option value="">Select</option>
+                    <option>Female</option>
+                    <option>Male</option>
+                    <option>Other</option>
+                  </select>
+                </label>
+                <label class="field"><span>City *</span><input type="text" name="city" required /></label>
+              </div>
+              <div class="step-actions"><button type="button" class="btn btn-primary" data-next>Next</button></div>
+            </section>
+
+            <section class="form-step" data-step="1">
+              <div class="field-grid two">
+                <label class="field"><span>Current Class *</span>
+                  <select name="classLevel" required>
+                    <option value="">Select</option>
+                    <option>Class 1-5</option><option>Class 6-8</option><option>Class 9-10</option><option>Class 11-12</option>
+                  </select>
+                </label>
+                <label class="field"><span>Board *</span>
+                  <select name="board" required>
+                    <option value="">Select</option><option>CBSE</option><option>ICSE</option><option>State Board</option>
+                  </select>
+                </label>
+              </div>
+              <label class="field"><span>Subjects Needed *</span><input type="text" name="subjects" required placeholder="Maths, Science" /></label>
+              <div class="step-actions between"><button type="button" class="btn btn-soft" data-prev>Back</button><button type="button" class="btn btn-primary" data-next>Next</button></div>
+            </section>
+
+            <section class="form-step" data-step="2">
+              <div class="field-grid two">
+                <label class="field"><span>Learning Mode *</span>
+                  <select name="mode" required>
+                    <option value="">Select</option><option>Online</option><option>Offline / Home Visit</option><option>Group Batch</option>
+                  </select>
+                </label>
+                <label class="field"><span>Preferred Timing *</span>
+                  <select name="timing" required>
+                    <option value="">Select</option><option>Morning</option><option>Afternoon</option><option>Evening</option>
+                  </select>
+                </label>
+              </div>
+              <label class="field"><span>Learning Goal</span><textarea name="goal" rows="4" placeholder="e.g. Board exam prep, concept clarity"></textarea></label>
+              <div class="step-actions between"><button type="button" class="btn btn-soft" data-prev>Back</button><button type="button" class="btn btn-primary" data-next>Next</button></div>
+            </section>
+
+            <section class="form-step" data-step="3">
+              <div class="field-grid two">
+                <label class="field"><span>Parent/Guardian Name *</span><input type="text" name="guardianName" required /></label>
+                <label class="field"><span>Guardian Phone *</span><input type="tel" name="guardianPhone" required pattern="^\d{10}$" /></label>
+              </div>
+              <label class="field"><span>Email</span><input type="email" name="email" placeholder="optional" /></label>
+              <div class="review-card" id="studentReview"></div>
+              <div class="step-actions between"><button type="button" class="btn btn-soft" data-prev>Back</button><button type="submit" class="btn btn-primary">Submit Onboarding</button></div>
+            </section>
+          </form>
+
+          <div class="success-card" id="studentSuccess" hidden>
+            <i class="fas fa-circle-check"></i>
+            <h3>Student Onboarding Complete</h3>
+            <p>Great start. We’ll match and confirm your teacher shortly.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="main.js"></script>
+</body>
+</html>

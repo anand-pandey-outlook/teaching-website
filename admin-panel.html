@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel — Utkarsh Home Tuition</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="toast-container" id="toastContainer"></div>
+
+  <main class="container section">
+    <div class="admin-header">
+      <div class="admin-title">
+        <p class="eyebrow">Admin Control</p>
+        <h1>Coaching Operations Panel</h1>
+        <p>Manage programs, classes, subjects, and batches with editable controls.</p>
+      </div>
+      <div>
+        <a href="index.html" class="btn btn-soft">Back to Website</a>
+      </div>
+    </div>
+
+    <div class="admin-grid">
+      <section class="admin-card">
+        <h3>Program Manager</h3>
+        <form id="programForm" class="admin-form" novalidate>
+          <input type="hidden" name="editIndex" value="" />
+          <div class="field-grid two">
+            <label class="field">
+              <span>Program Name *</span>
+              <input type="text" name="program" required placeholder="e.g. Board Booster" />
+            </label>
+            <label class="field">
+              <span>Mode *</span>
+              <select name="mode" required>
+                <option value="">Select</option>
+                <option>Online</option>
+                <option>Offline</option>
+                <option>Hybrid</option>
+              </select>
+            </label>
+          </div>
+          <div class="field-grid two">
+            <label class="field">
+              <span>Class Range *</span>
+              <input type="text" name="classRange" required placeholder="Class 9-10" />
+            </label>
+            <label class="field">
+              <span>Monthly Fee (Rs.) *</span>
+              <input type="number" name="fee" min="1" required placeholder="2000" />
+            </label>
+          </div>
+          <div class="admin-actions">
+            <button class="btn btn-primary" type="submit">Save Program</button>
+            <button class="btn btn-soft" type="button" data-reset="programForm">Reset</button>
+          </div>
+        </form>
+        <div class="table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr><th>Program</th><th>Mode</th><th>Class</th><th>Fee</th><th>Action</th></tr>
+            </thead>
+            <tbody id="programTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="admin-card">
+        <h3>Class Manager</h3>
+        <form id="classForm" class="admin-form" novalidate>
+          <input type="hidden" name="editIndex" value="" />
+          <div class="field-grid two">
+            <label class="field">
+              <span>Class Label *</span>
+              <input type="text" name="className" required placeholder="Class 10" />
+            </label>
+            <label class="field">
+              <span>Board *</span>
+              <select name="board" required>
+                <option value="">Select</option>
+                <option>CBSE</option>
+                <option>ICSE</option>
+                <option>State Board</option>
+              </select>
+            </label>
+          </div>
+          <div class="field-grid two">
+            <label class="field">
+              <span>Academic Session *</span>
+              <input type="text" name="session" required placeholder="2026-27" />
+            </label>
+            <label class="field">
+              <span>Status *</span>
+              <select name="status" required>
+                <option value="">Select</option>
+                <option>Active</option>
+                <option>Planned</option>
+                <option>Closed</option>
+              </select>
+            </label>
+          </div>
+          <div class="admin-actions">
+            <button class="btn btn-primary" type="submit">Save Class</button>
+            <button class="btn btn-soft" type="button" data-reset="classForm">Reset</button>
+          </div>
+        </form>
+        <div class="table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr><th>Class</th><th>Board</th><th>Session</th><th>Status</th><th>Action</th></tr>
+            </thead>
+            <tbody id="classTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="admin-card">
+        <h3>Subject Manager</h3>
+        <form id="subjectForm" class="admin-form" novalidate>
+          <input type="hidden" name="editIndex" value="" />
+          <div class="field-grid two">
+            <label class="field">
+              <span>Subject Name *</span>
+              <input type="text" name="subject" required placeholder="Physics" />
+            </label>
+            <label class="field">
+              <span>Stream *</span>
+              <select name="stream" required>
+                <option value="">Select</option>
+                <option>Primary</option>
+                <option>Middle</option>
+                <option>Science</option>
+                <option>Commerce</option>
+                <option>Humanities</option>
+              </select>
+            </label>
+          </div>
+          <div class="field-grid two">
+            <label class="field">
+              <span>Mapped Class *</span>
+              <input type="text" name="mappedClass" required placeholder="Class 11" />
+            </label>
+            <label class="field">
+              <span>Weekly Slots *</span>
+              <input type="number" name="weeklySlots" min="1" required placeholder="3" />
+            </label>
+          </div>
+          <div class="admin-actions">
+            <button class="btn btn-primary" type="submit">Save Subject</button>
+            <button class="btn btn-soft" type="button" data-reset="subjectForm">Reset</button>
+          </div>
+        </form>
+        <div class="table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr><th>Subject</th><th>Stream</th><th>Class</th><th>Slots/Week</th><th>Action</th></tr>
+            </thead>
+            <tbody id="subjectTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="admin-card">
+        <h3>Batch Manager</h3>
+        <form id="batchForm" class="admin-form" novalidate>
+          <input type="hidden" name="editIndex" value="" />
+          <div class="field-grid two">
+            <label class="field">
+              <span>Batch Name *</span>
+              <input type="text" name="batch" required placeholder="Batch A - Evening" />
+            </label>
+            <label class="field">
+              <span>Capacity *</span>
+              <input type="number" name="capacity" min="1" required placeholder="20" />
+            </label>
+          </div>
+          <div class="field-grid two">
+            <label class="field">
+              <span>Program *</span>
+              <input type="text" name="programName" required placeholder="Board Booster" />
+            </label>
+            <label class="field">
+              <span>Schedule *</span>
+              <input type="text" name="schedule" required placeholder="Mon/Wed/Fri - 6:00 PM" />
+            </label>
+          </div>
+          <div class="admin-actions">
+            <button class="btn btn-primary" type="submit">Save Batch</button>
+            <button class="btn btn-soft" type="button" data-reset="batchForm">Reset</button>
+          </div>
+        </form>
+        <div class="table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr><th>Batch</th><th>Program</th><th>Capacity</th><th>Schedule</th><th>Action</th></tr>
+            </thead>
+            <tbody id="batchTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="main.js"></script>
+</body>
+</html>

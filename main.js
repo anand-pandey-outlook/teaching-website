@@ -1,532 +1,511 @@
-/* ═══════════════════════════════════════════
-   Utkarsh Home Tuition — main.js v2
-   Full interactivity: particles, typewriter,
-   counters, ripple, popup, toast, FAQ,
-   testimonial slider, form validation
-   ═══════════════════════════════════════════ */
+const $ = (sel, root = document) => root.querySelector(sel);
+const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
-/* ─────────────────────────────
-   1. SCROLL PROGRESS BAR
-───────────────────────────── */
-const scrollBar = document.getElementById('scrollProgress');
+function showToast(message, type = 'info') {
+  const wrap = $('#toastContainer');
+  if (!wrap) return;
+  const el = document.createElement('div');
+  el.className = `toast toast-${type}`;
+  el.textContent = message;
+  wrap.appendChild(el);
+  setTimeout(() => el.remove(), 3200);
+}
+
+const scrollProgress = $('#scrollProgress');
 window.addEventListener('scroll', () => {
-  if (!scrollBar) return;
-  const p = window.scrollY / (document.body.scrollHeight - window.innerHeight);
-  scrollBar.style.width = (p * 100) + '%';
+  if (!scrollProgress) return;
+  const total = document.documentElement.scrollHeight - window.innerHeight;
+  const p = total > 0 ? (window.scrollY / total) * 100 : 0;
+  scrollProgress.style.width = `${p}%`;
 }, { passive: true });
 
-/* ─────────────────────────────
-   2. NAVBAR
-───────────────────────────── */
-const navbar    = document.getElementById('navbar');
-const hamburger = document.getElementById('hamburger');
-const navLinks  = document.getElementById('navLinks');
-
-if (navbar) {
-  window.addEventListener('scroll', () => {
-    navbar.classList.toggle('scrolled', window.scrollY > 40);
-  }, { passive: true });
-}
+const navbar = $('#navbar');
+const navLinks = $('#navLinks');
+const hamburger = $('#hamburger');
+const onboardModal = $('#onboardModal');
+const onboardClose = $('#onboardClose');
 
 if (hamburger && navLinks) {
-  hamburger.addEventListener('click', () => {
-    const open = navLinks.classList.toggle('open');
-    const [s1, s2, s3] = hamburger.querySelectorAll('span');
-    if (open) {
-      s1.style.cssText = 'transform:rotate(45deg) translate(5px,5px)';
-      s2.style.opacity = '0';
-      s3.style.cssText = 'transform:rotate(-45deg) translate(5px,-5px)';
-    } else {
-      [s1, s2, s3].forEach(s => s.style.cssText = '');
-    }
-  });
-  document.addEventListener('click', e => {
-    if (navbar && !navbar.contains(e.target)) {
-      navLinks.classList.remove('open');
-      hamburger.querySelectorAll('span').forEach(s => s.style.cssText = '');
-    }
-  });
-  navLinks.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => {
-      navLinks.classList.remove('open');
-      hamburger.querySelectorAll('span').forEach(s => s.style.cssText = '');
-    });
+  hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+  document.addEventListener('click', (e) => {
+    if (!navbar) return;
+    if (!navbar.contains(e.target)) navLinks.classList.remove('open');
   });
 }
 
-/* ─────────────────────────────
-   3. RIPPLE EFFECT
-───────────────────────────── */
-document.addEventListener('click', e => {
-  const btn = e.target.closest('.ripple');
-  if (!btn) return;
-  const r = document.createElement('span');
-  r.className = 'ripple-wave';
-  const rect = btn.getBoundingClientRect();
-  const size = Math.max(rect.width, rect.height);
-  r.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX-rect.left-size/2}px;top:${e.clientY-rect.top-size/2}px`;
-  btn.appendChild(r);
-  r.addEventListener('animationend', () => r.remove());
-});
-
-/* ─────────────────────────────
-   4. TOAST NOTIFICATIONS
-───────────────────────────── */
-function showToast(msg, type = 'success', duration = 3500) {
-  const container = document.getElementById('toastContainer');
-  if (!container) return;
-  const icon = type === 'success' ? 'fa-check-circle' : 'fa-times-circle';
-  const t = document.createElement('div');
-  t.className = `toast toast-${type}`;
-  t.innerHTML = `<i class="fas ${icon}"></i> ${msg}`;
-  container.appendChild(t);
-  setTimeout(() => {
-    t.style.animation = 'toastIn .3s ease reverse';
-    t.addEventListener('animationend', () => t.remove());
-  }, duration);
-}
-
-/* ─────────────────────────────
-   5. POPUP / MODAL
-───────────────────────────── */
-const leadPopup  = document.getElementById('leadPopup');
-const popupClose = document.getElementById('popupClose');
-const popupForm  = document.getElementById('popupForm');
-
-function openPopup() {
-  if (leadPopup) leadPopup.classList.add('open');
+function openOnboardModal(role = 'student') {
+  if (!onboardModal) return;
+  onboardModal.hidden = false;
   document.body.style.overflow = 'hidden';
+  setOnboardTab(role);
 }
-function closePopup() {
-  if (leadPopup) leadPopup.classList.remove('open');
+
+function closeOnboardModal() {
+  if (!onboardModal) return;
+  onboardModal.hidden = true;
   document.body.style.overflow = '';
 }
-window.openPopup = openPopup;
 
-if (popupClose) popupClose.addEventListener('click', closePopup);
-if (leadPopup)  leadPopup.addEventListener('click', e => { if (e.target === leadPopup) closePopup(); });
-
-// Auto-open popup after 20 seconds (only once per session)
-if (!sessionStorage.getItem('popupShown')) {
-  setTimeout(() => {
-    if (!leadPopup.classList.contains('open')) {
-      openPopup();
-      sessionStorage.setItem('popupShown', '1');
-    }
-  }, 20000);
+function setOnboardTab(role) {
+  const studentPanel = $('#studentPanel');
+  const teacherPanel = $('#teacherPanel');
+  if (studentPanel) studentPanel.classList.toggle('active', role === 'student');
+  if (teacherPanel) teacherPanel.classList.toggle('active', role === 'teacher');
 }
 
-if (popupForm) {
-  popupForm.addEventListener('submit', e => {
+$$('[data-open-onboard]').forEach((btn) => {
+  btn.addEventListener('click', () => openOnboardModal(btn.dataset.openOnboard || 'student'));
+});
+
+if (onboardClose) onboardClose.addEventListener('click', closeOnboardModal);
+if (onboardModal) {
+  onboardModal.addEventListener('click', (e) => {
+    if (e.target === onboardModal) closeOnboardModal();
+  });
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && onboardModal && !onboardModal.hidden) closeOnboardModal();
+});
+
+$$('a[href^="#"]').forEach((link) => {
+  link.addEventListener('click', (e) => {
+    const href = link.getAttribute('href');
+    if (!href || href === '#') return;
+    const target = $(href);
+    if (!target) return;
     e.preventDefault();
-    const inputs = popupForm.querySelectorAll('input, select');
-    const name   = inputs[0].value.trim();
-    const phone  = inputs[1].value.trim();
-    const cls    = inputs[2].value;
-    if (phone.length !== 10 || !/^\d+$/.test(phone)) {
-      showToast('Please enter a valid 10-digit WhatsApp number.', 'error');
+    const offset = (navbar ? navbar.offsetHeight : 0) + 12;
+    window.scrollTo({ top: target.offsetTop - offset, behavior: 'smooth' });
+    navLinks?.classList.remove('open');
+  });
+});
+
+$$('.faq-item').forEach((item) => {
+  const trigger = $('.faq-q', item);
+  if (!trigger) return;
+  trigger.addEventListener('click', () => item.classList.toggle('open'));
+});
+
+function setInvalidState(input, invalid) {
+  if (!input) return;
+  input.classList.toggle('invalid', invalid);
+}
+
+function validateStep(step) {
+  const fields = $$('input, select, textarea', step);
+  let ok = true;
+  fields.forEach((field) => {
+    if (field.disabled || field.type === 'hidden') return;
+    const valid = field.checkValidity();
+    setInvalidState(field, !valid);
+    if (!valid) ok = false;
+  });
+  return ok;
+}
+
+function renderReview(form, targetId) {
+  const review = $(`#${targetId}`);
+  if (!review) return;
+  const data = new FormData(form);
+  const list = document.createElement('ul');
+  data.forEach((val, key) => {
+    if (!val) return;
+    const row = document.createElement('li');
+    row.textContent = `${key}: ${val}`;
+    list.appendChild(row);
+  });
+  review.innerHTML = '';
+  review.appendChild(list);
+}
+
+function initWizard({ formId, progressId, successId, reviewId }) {
+  const form = $(`#${formId}`);
+  if (!form) return;
+
+  const steps = $$('.form-step', form);
+  const progress = $(`#${progressId}`);
+  const success = $(`#${successId}`);
+  const top = form.closest('.wizard-card') ? $('.wizard-top', form.closest('.wizard-card')) : null;
+  const labels = top ? $$('.wizard-steps span', top) : [];
+
+  let index = 0;
+
+  function paint() {
+    steps.forEach((step, i) => step.classList.toggle('active', i === index));
+    labels.forEach((l, i) => l.classList.toggle('active', i <= index));
+    if (progress) {
+      const ratio = steps.length <= 1 ? 100 : (index / (steps.length - 1)) * 100;
+      progress.style.width = `${ratio}%`;
+    }
+    if (reviewId && index === steps.length - 1) renderReview(form, reviewId);
+  }
+
+  form.addEventListener('click', (e) => {
+    const next = e.target.closest('[data-next]');
+    const prev = e.target.closest('[data-prev]');
+
+    if (next) {
+      if (!validateStep(steps[index])) {
+        showToast('Please fill all required fields correctly.', 'error');
+        return;
+      }
+      index = Math.min(index + 1, steps.length - 1);
+      paint();
+    }
+
+    if (prev) {
+      index = Math.max(index - 1, 0);
+      paint();
+    }
+  });
+
+  form.addEventListener('input', (e) => {
+    const t = e.target;
+    if (!(t instanceof HTMLInputElement || t instanceof HTMLSelectElement || t instanceof HTMLTextAreaElement)) return;
+    if (t.classList.contains('invalid')) setInvalidState(t, !t.checkValidity());
+  });
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!validateStep(steps[index])) {
+      showToast('Please complete required details before submit.', 'error');
       return;
     }
-    const msg = encodeURIComponent(`Hi Utkarsh Home Tuition!\n\nI want to book a FREE Demo Class.\n\nStudent Name: ${name}\nClass: ${cls}\nPhone: ${phone}\n\nPlease contact me.`);
-    window.open(`https://wa.me/919999999999?text=${msg}`, '_blank');
-    closePopup();
-    showToast('Opening WhatsApp... We will respond shortly!');
+    form.hidden = true;
+    if (top) top.hidden = true;
+    if (success) success.hidden = false;
+    showToast('Form submitted successfully (UI prototype).', 'success');
   });
+
+  paint();
 }
 
-/* ─────────────────────────────
-   6. HERO PARTICLES
-───────────────────────────── */
-const particleContainer = document.getElementById('heroParticles');
-if (particleContainer) {
-  for (let i = 0; i < 18; i++) {
-    const p = document.createElement('div');
-    p.className = 'particle';
-    const size = Math.random() * 40 + 10;
-    p.style.cssText = `
-      width:${size}px; height:${size}px;
-      left:${Math.random() * 100}%;
-      animation-duration:${Math.random() * 15 + 10}s;
-      animation-delay:${Math.random() * 10}s;
-      opacity:${Math.random() * .08 + .02};
-    `;
-    particleContainer.appendChild(p);
-  }
-}
-
-/* ─────────────────────────────
-   7. TYPEWRITER EFFECT
-───────────────────────────── */
-const typeEl   = document.getElementById('typewriter');
-const phrases  = ['At Your Doorstep', 'Online & Offline', 'Individual & Group', 'CBSE · ICSE · State Board', 'Starting ₹300/month'];
-let   pIdx = 0, cIdx = 0, deleting = false;
-
-function typeStep() {
-  if (!typeEl) return;
-  const current = phrases[pIdx];
-  if (!deleting) {
-    typeEl.textContent = current.slice(0, ++cIdx);
-    if (cIdx === current.length) { deleting = true; setTimeout(typeStep, 1800); return; }
-    setTimeout(typeStep, 70);
-  } else {
-    typeEl.textContent = current.slice(0, --cIdx);
-    if (cIdx === 0) { deleting = false; pIdx = (pIdx + 1) % phrases.length; setTimeout(typeStep, 400); return; }
-    setTimeout(typeStep, 40);
-  }
-}
-setTimeout(typeStep, 800);
-
-/* ─────────────────────────────
-   8. COUNTER ANIMATION
-───────────────────────────── */
-function animateCounter(el) {
-  const target = parseInt(el.dataset.target, 10);
-  const duration = 1800;
-  const start = performance.now();
-  function step(now) {
-    const elapsed = now - start;
-    const progress = Math.min(elapsed / duration, 1);
-    const eased = 1 - Math.pow(1 - progress, 3);
-    el.textContent = Math.floor(eased * target);
-    if (progress < 1) requestAnimationFrame(step);
-    else el.textContent = target;
-  }
-  requestAnimationFrame(step);
-}
-
-/* ─────────────────────────────
-   9. INTERSECTION OBSERVER (AOS + Counters)
-───────────────────────────── */
-const aosObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('aos-animate');
-      // Trigger counters inside newly visible elements
-      entry.target.querySelectorAll('.counter').forEach(c => {
-        if (!c.dataset.animated) { c.dataset.animated = '1'; animateCounter(c); }
-      });
-    }
-  });
-}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-
-document.querySelectorAll('[data-aos], .counter').forEach(el => {
-  if (el.classList.contains('counter')) {
-    // Observe counters directly (they may be inside a [data-aos] element)
-    const wrapper = el.closest('[data-aos]') || el;
-    aosObserver.observe(wrapper);
-  } else {
-    aosObserver.observe(el);
-  }
+initWizard({
+  formId: 'leadWizard',
+  progressId: 'leadProgress',
+  successId: 'leadSuccess',
+  reviewId: 'leadReview'
 });
 
-/* ─────────────────────────────
-   10. CLASS FILTER TABS
-───────────────────────────── */
-const modeTabs    = document.querySelectorAll('.mode-tab');
-const classCards  = document.querySelectorAll('.class-card');
+initWizard({
+  formId: 'studentWizard',
+  progressId: 'studentProgress',
+  successId: 'studentSuccess',
+  reviewId: 'studentReview'
+});
 
-modeTabs.forEach(tab => {
-  tab.addEventListener('click', () => {
-    modeTabs.forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
-    const mode = tab.dataset.mode;
-    classCards.forEach(card => {
-      if (mode === 'all' || card.dataset.mode === mode) {
-        card.classList.remove('hidden');
-        card.style.animation = 'none';
-        requestAnimationFrame(() => { card.style.animation = ''; });
-      } else {
-        card.classList.add('hidden');
-      }
+initWizard({
+  formId: 'teacherWizard',
+  progressId: 'teacherProgress',
+  successId: 'teacherSuccess',
+  reviewId: 'teacherReview'
+});
+
+const roleSwitch = $('#roleSwitch');
+const loginRole = $('#loginRole');
+const roleHelp = $('#roleHelp');
+const identifierLabel = $('#identifierLabel');
+const identifierInput = $('#loginForm [name="identifier"]');
+if (roleSwitch && loginRole) {
+  const roleMeta = {
+    student: {
+      help: 'Student mode: track classes, schedules, and progress.',
+      label: 'Email or Phone *',
+      placeholder: 'Enter email or 10-digit phone'
+    },
+    teacher: {
+      help: 'Teacher mode: manage sessions, assignments, and batches.',
+      label: 'Email or Phone *',
+      placeholder: 'Enter email or 10-digit phone'
+    },
+    admin: {
+      help: 'Admin mode: configure programs, subjects, and admissions.',
+      label: 'Admin Email or Username *',
+      placeholder: 'Enter admin email or username'
+    }
+  };
+
+  function paintRole(role) {
+    const meta = roleMeta[role] || roleMeta.student;
+    if (roleHelp) roleHelp.textContent = meta.help;
+    if (identifierLabel) identifierLabel.textContent = meta.label;
+    if (identifierInput) identifierInput.placeholder = meta.placeholder;
+  }
+
+  $$('button', roleSwitch).forEach((btn) => {
+    btn.addEventListener('click', () => {
+      $$('button', roleSwitch).forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      const role = btn.dataset.role || 'student';
+      loginRole.value = role;
+      paintRole(role);
     });
   });
-});
 
-/* ─────────────────────────────
-   11. TESTIMONIAL SLIDER
-───────────────────────────── */
-const track    = document.getElementById('testiTrack');
-const prevBtn  = document.getElementById('testiPrev');
-const nextBtn  = document.getElementById('testiNext');
-const dotsWrap = document.getElementById('testiDots');
-
-if (track) {
-  const cards  = track.querySelectorAll('.testi-card');
-  let current  = 0;
-  let autoPlay;
-
-  function getVisible() {
-    if (window.innerWidth <= 768) return 1;
-    if (window.innerWidth <= 900) return 2;
-    return 3;
-  }
-
-  function buildDots() {
-    if (!dotsWrap) return;
-    dotsWrap.innerHTML = '';
-    const count = Math.ceil(cards.length / getVisible());
-    for (let i = 0; i < count; i++) {
-      const d = document.createElement('button');
-      d.className = 'testi-dot' + (i === 0 ? ' active' : '');
-      d.addEventListener('click', () => goTo(i));
-      dotsWrap.appendChild(d);
-    }
-  }
-
-  function goTo(idx) {
-    const vis = getVisible();
-    const max = Math.ceil(cards.length / vis) - 1;
-    current = Math.max(0, Math.min(idx, max));
-    const cardW = cards[0].getBoundingClientRect().width;
-    const gap   = 24;
-    track.style.transform = `translateX(-${current * (cardW * vis + gap * vis)}px)`;
-    dotsWrap.querySelectorAll('.testi-dot').forEach((d, i) => d.classList.toggle('active', i === current));
-  }
-
-  buildDots();
-  if (prevBtn) prevBtn.addEventListener('click', () => { clearInterval(autoPlay); goTo(current - 1); startAuto(); });
-  if (nextBtn) nextBtn.addEventListener('click', () => { clearInterval(autoPlay); goTo(current + 1); startAuto(); });
-
-  function startAuto() {
-    autoPlay = setInterval(() => {
-      const max = Math.ceil(cards.length / getVisible()) - 1;
-      goTo(current >= max ? 0 : current + 1);
-    }, 5000);
-  }
-  startAuto();
-  window.addEventListener('resize', () => { buildDots(); goTo(0); });
+  paintRole(loginRole.value);
 }
 
-/* ─────────────────────────────
-   12. FAQ ACCORDION
-───────────────────────────── */
-document.querySelectorAll('.faq-item').forEach(item => {
-  const btn = item.querySelector('.faq-q');
-  if (!btn) return;
+$$('[data-toggle-password]').forEach((btn) => {
   btn.addEventListener('click', () => {
-    const isOpen = item.classList.contains('open');
-    // Close all
-    document.querySelectorAll('.faq-item.open').forEach(o => o.classList.remove('open'));
-    if (!isOpen) item.classList.add('open');
+    const wrap = btn.closest('.password-wrap');
+    const input = wrap ? $('input', wrap) : null;
+    if (!input) return;
+    input.type = input.type === 'password' ? 'text' : 'password';
+    btn.innerHTML = input.type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
   });
 });
 
-/* ─────────────────────────────
-   13. LEAD FORM (Main)
-───────────────────────────── */
-const leadForm = document.getElementById('leadForm');
-if (leadForm) {
-  // Checkbox pills toggle
-  leadForm.querySelectorAll('.check-pill').forEach(pill => {
-    pill.addEventListener('click', () => pill.classList.toggle('selected'));
-  });
-
-  leadForm.addEventListener('submit', e => {
+const loginForm = $('#loginForm');
+if (loginForm) {
+  loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    let valid = true;
+    const identifier = $('[name="identifier"]', loginForm);
+    const password = $('[name="password"]', loginForm);
+    if (!identifier || !password) return;
 
-    const nameInput  = leadForm.querySelector('[name="name"]');
-    const phoneInput = leadForm.querySelector('[name="phone"]');
-    const errName    = document.getElementById('err-name');
-    const errPhone   = document.getElementById('err-phone');
+    const idValue = identifier.value.trim();
+    const passValue = password.value.trim();
+    const role = loginRole ? loginRole.value : 'student';
+    const phoneLike = /^\d{10}$/.test(idValue);
+    const emailLike = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(idValue);
+    const usernameLike = /^[a-zA-Z0-9._-]{4,}$/.test(idValue);
 
-    // Validate name
-    if (nameInput && nameInput.value.trim().length < 2) {
-      if (errName) { errName.textContent = 'Please enter student name.'; errName.classList.add('show'); }
-      valid = false;
-    } else if (errName) errName.classList.remove('show');
+    const identifierValid = role === 'admin' ? (emailLike || usernameLike) : (phoneLike || emailLike);
 
-    // Validate phone
-    const phone = phoneInput ? phoneInput.value.trim() : '';
-    if (!/^\d{10}$/.test(phone)) {
-      if (errPhone) { errPhone.textContent = 'Enter a valid 10-digit number.'; errPhone.classList.add('show'); }
-      valid = false;
-    } else if (errPhone) errPhone.classList.remove('show');
+    setInvalidState(identifier, !identifierValid);
+    setInvalidState(password, passValue.length < 6);
 
-    if (!valid) { showToast('Please fix the errors before submitting.', 'error'); return; }
+    if (!identifierValid || passValue.length < 6) {
+      showToast('Enter valid login credentials.', 'error');
+      return;
+    }
 
-    // Collect all data
-    const data = Object.fromEntries(new FormData(leadForm));
-    const subjects = [...leadForm.querySelectorAll('.check-pill.selected')].map(p => p.textContent.trim()).join(', ') || 'Not specified';
-
-    const msg = encodeURIComponent(
-      `Hi Utkarsh Home Tuition! 👋\n\n` +
-      `📋 *Enrolment Request*\n\n` +
-      `👤 Student: ${data.name || ''}\n` +
-      `📚 Class: ${data.class || ''} (${data.board || ''})\n` +
-      `📖 Subjects: ${subjects}\n` +
-      `🎯 Mode: ${data.mode || ''}\n` +
-      `⏰ Preferred Time: ${data.time || ''}\n` +
-      `📱 Phone: ${phone}\n` +
-      `📍 City: ${data.city || 'Not specified'}\n` +
-      `💬 Message: ${data.message || 'None'}\n\n` +
-      `Please contact me to schedule a FREE demo class. Thank you!`
-    );
-
-    const submitBtn = document.getElementById('submitBtn');
-    if (submitBtn) {
-      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Redirecting...';
-      submitBtn.disabled = true;
+    const btn = $('#loginBtn');
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = 'Logging in...';
     }
 
     setTimeout(() => {
-      window.open(`https://wa.me/919999999999?text=${msg}`, '_blank');
-      showToast('Opening WhatsApp! We will reach you within 30 minutes.', 'success');
-      leadForm.reset();
-      leadForm.querySelectorAll('.check-pill').forEach(p => p.classList.remove('selected'));
-      if (submitBtn) {
-        submitBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Book FREE Demo on WhatsApp';
-        submitBtn.disabled = false;
+      if (role === 'admin') {
+        showToast('Admin login successful. Opening control panel UI.', 'success');
+        window.location.href = 'admin-panel.html';
+        return;
       }
-    }, 600);
+
+      loginForm.hidden = true;
+      const success = $('#loginSuccess');
+      if (success) success.hidden = false;
+      showToast('Login success state shown. Backend pending.', 'success');
+    }, 700);
   });
 }
 
-/* ─────────────────────────────
-   14. HERO MINI FORM
-───────────────────────────── */
-const heroMiniForm = document.getElementById('heroMiniForm');
-if (heroMiniForm) {
-  heroMiniForm.addEventListener('submit', e => {
-    e.preventDefault();
-    const input = heroMiniForm.querySelector('input');
-    const phone = input ? input.value.trim() : '';
-    if (!/^\d{10}$/.test(phone)) {
-      showToast('Enter a valid 10-digit WhatsApp number.', 'error');
-      return;
-    }
-    const msg = encodeURIComponent(`Hi! I want to enquire about classes. My number is ${phone}. Please contact me.`);
-    window.open(`https://wa.me/919999999999?text=${msg}`, '_blank');
-    input.value = '';
-    showToast('Opening WhatsApp... We will call you back!');
-  });
-}
-
-/* ─────────────────────────────
-   15. CONTACT FORM
-───────────────────────────── */
-const contactForm = document.getElementById('contactForm');
+const contactForm = $('#contactForm');
 if (contactForm) {
-  contactForm.addEventListener('submit', e => {
+  contactForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    const inputs  = contactForm.querySelectorAll('input, textarea');
-    const name    = inputs[0]?.value.trim() || '';
-    const phone   = inputs[1]?.value.trim() || '';
-    const message = inputs[2]?.value.trim() || '';
-    if (!name || !/^\d{10}$/.test(phone)) {
-      showToast('Please fill name and a valid phone number.', 'error');
+    const name = $('[name="name"]', contactForm);
+    const phone = $('[name="phone"]', contactForm);
+
+    const nameValid = !!name && name.value.trim().length >= 2;
+    const phoneValid = !!phone && /^\d{10}$/.test(phone.value.trim());
+
+    setInvalidState(name, !nameValid);
+    setInvalidState(phone, !phoneValid);
+
+    if (!nameValid || !phoneValid) {
+      showToast('Please add valid name and 10-digit phone.', 'error');
       return;
     }
-    const msg = encodeURIComponent(`Hi Utkarsh Home Tuition!\n\nName: ${name}\nPhone: ${phone}\nMessage: ${message || 'I want to know more.'}`);
-    window.open(`https://wa.me/919999999999?text=${msg}`, '_blank');
-    showToast('Message sent via WhatsApp!');
+
     contactForm.reset();
+    showToast('Thanks! We will contact you soon.', 'success');
   });
 }
 
-/* ─────────────────────────────
-   16. POPUP FORM (inner pages)
-───────────────────────────── */
-// For inner pages that use generic buy modal
-document.querySelectorAll('[onclick^="buyNow"]').forEach(btn => {
-  // These are handled inline in each page script
-});
+function initAdminCrud() {
+  const adminGrid = $('.admin-grid');
+  if (!adminGrid) return;
 
-/* ─────────────────────────────
-   17. BACK TO TOP
-───────────────────────────── */
-const backTop = document.getElementById('backTop');
-if (backTop) {
-  window.addEventListener('scroll', () => {
-    backTop.classList.toggle('visible', window.scrollY > 400);
-  }, { passive: true });
-  backTop.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-}
-
-/* ─────────────────────────────
-   18. STICKY CTA (mobile)
-───────────────────────────── */
-const stickyCta = document.getElementById('stickyCta');
-if (stickyCta) {
-  window.addEventListener('scroll', () => {
-    if (window.innerWidth > 768) return; // desktop: CSS handles it (display:none)
-    const enroll = document.getElementById('enroll');
-    if (enroll) {
-      const rect = enroll.getBoundingClientRect();
-      stickyCta.style.display = rect.top < 0 ? 'none' : 'block';
+  const models = {
+    program: {
+      formId: 'programForm',
+      bodyId: 'programTableBody',
+      fields: ['program', 'mode', 'classRange', 'fee'],
+      seed: [
+        { program: 'Board Booster', mode: 'Hybrid', classRange: 'Class 10', fee: '2200' },
+        { program: 'Foundation Plus', mode: 'Online', classRange: 'Class 8', fee: '1800' }
+      ]
+    },
+    class: {
+      formId: 'classForm',
+      bodyId: 'classTableBody',
+      fields: ['className', 'board', 'session', 'status'],
+      seed: [
+        { className: 'Class 10', board: 'CBSE', session: '2026-27', status: 'Active' },
+        { className: 'Class 12', board: 'CBSE', session: '2026-27', status: 'Planned' }
+      ]
+    },
+    subject: {
+      formId: 'subjectForm',
+      bodyId: 'subjectTableBody',
+      fields: ['subject', 'stream', 'mappedClass', 'weeklySlots'],
+      seed: [
+        { subject: 'Physics', stream: 'Science', mappedClass: 'Class 11', weeklySlots: '3' },
+        { subject: 'Maths', stream: 'Middle', mappedClass: 'Class 8', weeklySlots: '4' }
+      ]
+    },
+    batch: {
+      formId: 'batchForm',
+      bodyId: 'batchTableBody',
+      fields: ['batch', 'programName', 'capacity', 'schedule'],
+      seed: [
+        { batch: 'Batch A Evening', programName: 'Board Booster', capacity: '20', schedule: 'Mon/Wed/Fri 6 PM' },
+        { batch: 'Batch B Morning', programName: 'Foundation Plus', capacity: '16', schedule: 'Tue/Thu/Sat 8 AM' }
+      ]
     }
-  }, { passive: true });
-}
+  };
 
-/* ─────────────────────────────
-   19. SMOOTH SCROLL for anchors
-───────────────────────────── */
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', e => {
-    const target = document.querySelector(a.getAttribute('href'));
-    if (target) {
+  const state = {};
+  Object.keys(models).forEach((k) => { state[k] = [...models[k].seed]; });
+
+  function tableRow(moduleKey, item, index) {
+    const row = document.createElement('tr');
+    models[moduleKey].fields.forEach((f) => {
+      const td = document.createElement('td');
+      td.textContent = item[f] ?? '';
+      row.appendChild(td);
+    });
+    const actions = document.createElement('td');
+    actions.className = 'action-buttons';
+    actions.innerHTML = `<button type="button" class="btn-mini" data-edit="${moduleKey}" data-index="${index}">Edit</button>
+      <button type="button" class="btn-mini delete" data-delete="${moduleKey}" data-index="${index}">Delete</button>`;
+    row.appendChild(actions);
+    return row;
+  }
+
+  function render(moduleKey) {
+    const body = document.getElementById(models[moduleKey].bodyId);
+    if (!body) return;
+    body.innerHTML = '';
+    state[moduleKey].forEach((item, i) => body.appendChild(tableRow(moduleKey, item, i)));
+  }
+
+  function resetForm(form) {
+    form.reset();
+    const editIdx = form.querySelector('[name="editIndex"]');
+    if (editIdx) editIdx.value = '';
+    $$('input, select, textarea', form).forEach((c) => setInvalidState(c, false));
+  }
+
+  function validateForm(form) {
+    let valid = true;
+    $$('input, select, textarea', form).forEach((c) => {
+      if (c.name === 'editIndex') return;
+      const isValid = c.checkValidity();
+      setInvalidState(c, !isValid);
+      if (!isValid) valid = false;
+    });
+    return valid;
+  }
+
+  function formDataObject(form, fields) {
+    const data = new FormData(form);
+    const out = {};
+    fields.forEach((f) => { out[f] = (data.get(f) || '').toString().trim(); });
+    return out;
+  }
+
+  Object.entries(models).forEach(([moduleKey, meta]) => {
+    const form = document.getElementById(meta.formId);
+    if (!form) return;
+
+    form.addEventListener('submit', (e) => {
       e.preventDefault();
-      const offset = (navbar ? navbar.offsetHeight : 70) + 16;
-      window.scrollTo({ top: target.offsetTop - offset, behavior: 'smooth' });
-    }
-  });
-});
+      if (!validateForm(form)) {
+        showToast('Please complete required fields.', 'error');
+        return;
+      }
+      const editIdx = form.querySelector('[name="editIndex"]');
+      const idx = editIdx && editIdx.value !== '' ? Number(editIdx.value) : -1;
+      const payload = formDataObject(form, meta.fields);
 
-/* ─────────────────────────────
-   20. FILTER BUTTONS (inner pages)
-───────────────────────────── */
-document.querySelectorAll('.filter-bar').forEach(bar => {
-  bar.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      bar.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+      if (idx >= 0) {
+        state[moduleKey][idx] = payload;
+        showToast(`${moduleKey} updated successfully.`, 'success');
+      } else {
+        state[moduleKey].push(payload);
+        showToast(`${moduleKey} added successfully.`, 'success');
+      }
+      render(moduleKey);
+      resetForm(form);
     });
   });
-});
 
-/* ─────────────────────────────
-   21. SUBJECT CHIP HOVER (hero card)
-───────────────────────────── */
-document.querySelectorAll('.sub-chip').forEach((chip, i) => {
-  chip.style.transitionDelay = `${i * 40}ms`;
-});
+  document.addEventListener('click', (e) => {
+    const editBtn = e.target.closest('[data-edit]');
+    const deleteBtn = e.target.closest('[data-delete]');
+    const resetBtn = e.target.closest('[data-reset]');
 
-/* ─────────────────────────────
-   22. ACTIVE NAV HIGHLIGHT
-───────────────────────────── */
-const page = window.location.pathname.split('/').pop() || 'index.html';
-document.querySelectorAll('.nav-links a').forEach(link => {
-  const href = link.getAttribute('href') || '';
-  if (href === page || (page === '' && href === 'index.html') || href === `#${page.replace('.html', '')}`) {
-    link.style.color = 'var(--saffron)';
-  }
-});
+    if (resetBtn) {
+      const form = document.getElementById(resetBtn.dataset.reset);
+      if (form) resetForm(form);
+    }
 
-/* ─────────────────────────────
-   23. INPUT FOCUS EFFECTS
-───────────────────────────── */
-document.querySelectorAll('.input-wrap input, .input-wrap select, .input-wrap textarea').forEach(input => {
-  input.addEventListener('focus', () => {
-    input.closest('.input-wrap')?.classList.add('focused');
+    if (editBtn) {
+      const moduleKey = editBtn.dataset.edit;
+      const idx = Number(editBtn.dataset.index);
+      const meta = models[moduleKey];
+      const form = document.getElementById(meta.formId);
+      const rowData = state[moduleKey][idx];
+      if (!form || !rowData) return;
+      meta.fields.forEach((f) => {
+        const input = form.querySelector(`[name="${f}"]`);
+        if (input) input.value = rowData[f] ?? '';
+      });
+      const editIdx = form.querySelector('[name="editIndex"]');
+      if (editIdx) editIdx.value = String(idx);
+      showToast(`Editing ${moduleKey}.`, 'info');
+      form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    if (deleteBtn) {
+      const moduleKey = deleteBtn.dataset.delete;
+      const idx = Number(deleteBtn.dataset.index);
+      state[moduleKey].splice(idx, 1);
+      render(moduleKey);
+      showToast(`${moduleKey} deleted.`, 'success');
+    }
   });
-  input.addEventListener('blur', () => {
-    input.closest('.input-wrap')?.classList.remove('focused');
-  });
-});
 
-/* ─────────────────────────────
-   24. INLINE PAGE SWITCH (individual/group/online/offline pages)
-───────────────────────────── */
-window.switchMode = function(btn, showId, hideId) {
+  Object.keys(models).forEach((k) => render(k));
+}
+
+initAdminCrud();
+
+window.switchMode = function switchMode(btn, showId, hideId) {
   const showEl = document.getElementById(showId);
   const hideEl = document.getElementById(hideId);
-  if (showEl) { showEl.style.display = 'grid'; }
-  if (hideEl) { hideEl.style.display = 'none'; }
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
+  if (showEl) showEl.style.display = 'grid';
+  if (hideEl) hideEl.style.display = 'none';
+  $$('.filter-btn').forEach((el) => el.classList.remove('active'));
+  if (btn) btn.classList.add('active');
 };
 
-console.log('%c Utkarsh Home Tuition ✦', 'color:#FF6B00;font-size:18px;font-weight:bold;');
-console.log('%c Website loaded successfully!', 'color:#3A0CA3;font-size:12px;');
+window.buyNow = function buyNow(item, price) {
+  const modal = $('#buy-modal');
+  const title = $('#modal-title');
+  const link = $('#modal-wa');
+
+  if (!modal || !title || !link) {
+    showToast(`Selected: ${item} (Rs.${price})`, 'info');
+    return;
+  }
+
+  title.textContent = `${item} - Rs.${price}`;
+  const msg = encodeURIComponent(`Hi Utkarsh Team, I want to buy: ${item} (Rs.${price}). Please share payment steps.`);
+  link.href = `https://wa.me/919999999999?text=${msg}`;
+  modal.style.display = 'flex';
+};

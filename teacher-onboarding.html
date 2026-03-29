@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Teacher Onboarding — Utkarsh Home Tuition</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="auth-shell onboarding-page">
+  <div class="toast-container" id="toastContainer"></div>
+
+  <main class="onboard-modal-wrap">
+    <section class="wizard-card onboard-modal">
+      <header class="onboard-head">
+        <div>
+          <p class="eyebrow">Teacher Onboarding</p>
+          <h1>Become a Utkarsh Mentor</h1>
+        </div>
+        <a href="index.html" class="btn btn-soft btn-sm"><i class="fas fa-times"></i> Close</a>
+      </header>
+
+      <div class="onboard-grid">
+        <aside class="onboard-side">
+          <h3>Mentor Activation Flow</h3>
+          <ul>
+            <li><i class="fas fa-check-circle"></i> Profile and qualification review.</li>
+            <li><i class="fas fa-check-circle"></i> Subject fit and demo evaluation.</li>
+            <li><i class="fas fa-check-circle"></i> Batch assignment after approval.</li>
+          </ul>
+          <div class="onboard-side-note">
+            <strong>Onboarding support</strong>
+            <p>Academic operations team helps with profile setup.</p>
+          </div>
+        </aside>
+
+        <div class="onboard-content">
+          <div class="wizard-top">
+            <p>Complete your profile and we’ll activate your teaching profile after review.</p>
+            <div class="wizard-progress">
+              <div class="wizard-progress-bar" id="teacherProgress"></div>
+            </div>
+            <div class="wizard-steps">
+              <span class="active">Profile</span>
+              <span>Qualification</span>
+              <span>Preferences</span>
+              <span>Documents</span>
+            </div>
+          </div>
+
+          <form id="teacherWizard" class="wizard-form" novalidate>
+            <section class="form-step active" data-step="0">
+              <div class="field-grid two">
+                <label class="field"><span>Full Name *</span><input type="text" name="fullName" required minlength="2" /></label>
+                <label class="field"><span>Phone *</span><input type="tel" name="phone" required pattern="^\d{10}$" /></label>
+              </div>
+              <div class="field-grid two">
+                <label class="field"><span>Email *</span><input type="email" name="email" required /></label>
+                <label class="field"><span>City *</span><input type="text" name="city" required /></label>
+              </div>
+              <div class="step-actions"><button type="button" class="btn btn-primary" data-next>Next</button></div>
+            </section>
+
+            <section class="form-step" data-step="1">
+              <div class="field-grid two">
+                <label class="field"><span>Highest Qualification *</span><input type="text" name="qualification" required placeholder="e.g. B.Sc, M.Ed" /></label>
+                <label class="field"><span>Years of Experience *</span><input type="number" name="experience" min="0" required /></label>
+              </div>
+              <label class="field"><span>Subjects You Teach *</span><input type="text" name="subjects" required placeholder="Maths, Physics" /></label>
+              <div class="step-actions between"><button type="button" class="btn btn-soft" data-prev>Back</button><button type="button" class="btn btn-primary" data-next>Next</button></div>
+            </section>
+
+            <section class="form-step" data-step="2">
+              <div class="field-grid two">
+                <label class="field"><span>Preferred Classes *</span><input type="text" name="classPref" required placeholder="Class 8-12" /></label>
+                <label class="field"><span>Teaching Mode *</span>
+                  <select name="mode" required>
+                    <option value="">Select</option><option>Online</option><option>Offline</option><option>Both</option>
+                  </select>
+                </label>
+              </div>
+              <label class="field"><span>Availability *</span><input type="text" name="availability" required placeholder="Mon-Sat, 4pm-9pm" /></label>
+              <div class="step-actions between"><button type="button" class="btn btn-soft" data-prev>Back</button><button type="button" class="btn btn-primary" data-next>Next</button></div>
+            </section>
+
+            <section class="form-step" data-step="3">
+              <div class="upload-grid">
+                <article><i class="fas fa-id-card"></i><h4>ID Proof</h4><p>Upload in Next.js phase</p></article>
+                <article><i class="fas fa-file-certificate"></i><h4>Degree Certificate</h4><p>Upload in Next.js phase</p></article>
+                <article><i class="fas fa-file-signature"></i><h4>Resume</h4><p>Upload in Next.js phase</p></article>
+              </div>
+              <div class="review-card" id="teacherReview"></div>
+              <div class="step-actions between"><button type="button" class="btn btn-soft" data-prev>Back</button><button type="submit" class="btn btn-primary">Submit Application</button></div>
+            </section>
+          </form>
+
+          <div class="success-card" id="teacherSuccess" hidden>
+            <i class="fas fa-circle-check"></i>
+            <h3>Application Submitted</h3>
+            <p>Thanks for applying. Our academic team will review and connect with you.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="main.js"></script>
+</body>
+</html>
