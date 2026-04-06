@@ -122,6 +122,17 @@ function isLeadStored(result) {
   return Boolean(result && result.ok && result.id);
 }
 
+function clearFormAfterSuccess(formEl) {
+  if (!formEl) return;
+  formEl.reset();
+  formEl.querySelectorAll('input[name="subject"]').forEach(input => { input.checked = false; });
+  formEl.querySelectorAll('.check-pill, .teacher-check-pill').forEach(p => p.classList.remove('selected'));
+  formEl.querySelectorAll('.field-error').forEach(err => {
+    err.textContent = '';
+    err.classList.remove('show');
+  });
+}
+
 const WHATSAPP_NUMBER = '919128296275';
 
 function initPillCheckboxes(formEl, pillSelector) {
@@ -252,7 +263,7 @@ if (popupForm) {
     closePopup();
     openThanksPopup(name, 'student');
     showToast('Thanks! Your demo request has been received. Opening WhatsApp...', 'success');
-    popupForm.reset();
+    clearFormAfterSuccess(popupForm);
     if (submitBtn) {
       submitBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Book Free Demo Now';
       submitBtn.disabled = false;
@@ -577,9 +588,7 @@ if (leadForm) {
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
     showToast('Thanks! Your demo request has been received. Opening WhatsApp...', 'success');
     openThanksPopup(data.name || 'there', 'student');
-    leadForm.reset();
-    leadForm.querySelectorAll('input[name="subject"]').forEach(input => { input.checked = false; });
-    leadForm.querySelectorAll('.check-pill').forEach(p => p.classList.remove('selected'));
+    clearFormAfterSuccess(leadForm);
     if (submitBtn) {
       submitBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Book FREE Demo on WhatsApp';
       submitBtn.disabled = false;
@@ -672,9 +681,7 @@ if (teacherForm) {
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
     showToast('Thanks! Your teacher enquiry has been received. Opening WhatsApp...', 'success');
     openThanksPopup(data.name || 'there', 'teacher');
-    teacherForm.reset();
-    teacherForm.querySelectorAll('input[name="subject"]').forEach(input => { input.checked = false; });
-    teacherForm.querySelectorAll('.teacher-check-pill').forEach(p => p.classList.remove('selected'));
+    clearFormAfterSuccess(teacherForm);
     if (submitBtn) {
       submitBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Apply as Teacher on WhatsApp';
       submitBtn.disabled = false;
@@ -716,7 +723,7 @@ if (heroMiniForm) {
       return;
     }
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
-    input.value = '';
+    clearFormAfterSuccess(heroMiniForm);
     showToast('Thanks! Your enquiry has been received. Opening WhatsApp...', 'success');
     if (submitBtn) {
       submitBtn.innerHTML = 'Go <i class="fas fa-arrow-right"></i>';
@@ -763,7 +770,7 @@ if (contactForm) {
     }
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
     showToast('Thanks! Your message has been received. Opening WhatsApp...', 'success');
-    contactForm.reset();
+    clearFormAfterSuccess(contactForm);
     if (submitBtn) {
       submitBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Send on WhatsApp';
       submitBtn.disabled = false;
