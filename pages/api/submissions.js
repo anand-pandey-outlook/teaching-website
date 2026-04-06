@@ -137,7 +137,7 @@ async function notifyAdminLead(submission) {
       text: email.text,
       html: email.html
     }),
-    new Promise((_, reject) => setTimeout(() => reject(new Error('smtp_timeout')), 10000))
+    new Promise((_, reject) => setTimeout(() => reject(new Error('smtp_timeout')), 3500))
   ]);
   return { sent: true };
 }
