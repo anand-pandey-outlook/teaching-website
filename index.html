@@ -86,7 +86,7 @@
         <li><a href="#contact" class="nav-link">Contact</a></li>
       </ul>
       <div class="nav-actions">
-        <a href="tel:+919999999999" class="btn btn-ghost"><i class="fas fa-phone-alt"></i> Call Now</a>
+        <a href="tel:+919128296275" class="btn btn-ghost"><i class="fas fa-phone-alt"></i> Call Now</a>
         <button class="btn btn-primary ripple" onclick="openPopup()">Book Free Demo</button>
       </div>
       <button class="hamburger" id="hamburger" aria-label="Menu">
@@ -412,22 +412,28 @@
             <li><i class="fas fa-check-circle"></i> Decide after demo &mdash; zero pressure</li>
           </ul>
           <div class="lead-contact-quick">
-            <a href="tel:+919999999999" class="quick-link"><i class="fas fa-phone-alt"></i> +91 99999 99999</a>
-            <a href="https://wa.me/919999999999" class="quick-link whatsapp-link" target="_blank"><i class="fab fa-whatsapp"></i> Chat on WhatsApp</a>
+            <a href="tel:+919128296275" class="quick-link"><i class="fas fa-phone-alt"></i> +91 91282 96275</a>
+            <a href="https://wa.me/919128296275" class="quick-link whatsapp-link" target="_blank"><i class="fab fa-whatsapp"></i> Chat on WhatsApp</a>
           </div>
         </div>
         <div class="lead-right">
           <div class="lead-form-card">
-            <h4><i class="fas fa-graduation-cap"></i> Enrolment Form</h4>
-            <form class="lead-form" id="leadForm">
-              <div class="form-group">
-                <label>Student's Full Name *</label>
-                <div class="input-wrap"><i class="fas fa-user"></i><input type="text" name="name" placeholder="e.g. Rahul Sharma" required /></div>
-                <span class="field-error" id="err-name"></span>
-              </div>
-              <div class="form-row-2">
+            <h4 id="leadFormTitle"><i class="fas fa-graduation-cap"></i> Enrolment Form</h4>
+            <div class="lead-form-switch" id="leadFormSwitch">
+              <button type="button" class="form-switch-btn active" data-form-type="student">Register as Student</button>
+              <button type="button" class="form-switch-btn" data-form-type="teacher">Register as Teacher</button>
+            </div>
+
+            <div class="form-panel active" id="studentFormPanel">
+              <form class="lead-form" id="leadForm">
                 <div class="form-group">
-                  <label>Class *</label>
+                  <label>Student's Full Name *</label>
+                  <div class="input-wrap"><i class="fas fa-user"></i><input type="text" name="name" placeholder="e.g. Rahul Sharma" required /></div>
+                  <span class="field-error" id="err-name"></span>
+                </div>
+                <div class="form-row-2">
+                  <div class="form-group">
+                    <label>Class *</label>
                   <div class="input-wrap"><i class="fas fa-layer-group"></i>
                     <select name="class" required>
                       <option value="" disabled selected>Select</option>
@@ -437,6 +443,7 @@
                       <option>Class 10</option><option>Class 11</option><option>Class 12</option>
                     </select>
                   </div>
+                  <span class="field-error" id="err-class"></span>
                 </div>
                 <div class="form-group">
                   <label>Board *</label>
@@ -446,22 +453,24 @@
                       <option>CBSE</option><option>ICSE</option><option>State Board</option><option>Other</option>
                     </select>
                   </div>
+                  <span class="field-error" id="err-board"></span>
                 </div>
               </div>
-              <div class="form-group">
-                <label>Subject(s) Needed *</label>
-                <div class="subject-checkboxes">
-                  <label class="check-pill"><input type="checkbox" name="subject" value="Maths" /> Maths</label>
-                  <label class="check-pill"><input type="checkbox" name="subject" value="Science" /> Science</label>
-                  <label class="check-pill"><input type="checkbox" name="subject" value="English" /> English</label>
-                  <label class="check-pill"><input type="checkbox" name="subject" value="Hindi" /> Hindi</label>
-                  <label class="check-pill"><input type="checkbox" name="subject" value="SST" /> SST</label>
-                  <label class="check-pill"><input type="checkbox" name="subject" value="Computer" /> Computer</label>
-                </div>
-              </div>
-              <div class="form-row-2">
                 <div class="form-group">
-                  <label>Mode *</label>
+                  <label>Subject(s) Needed *</label>
+                  <div class="subject-checkboxes">
+                    <label class="check-pill"><input type="checkbox" name="subject" value="Maths" /> Maths</label>
+                    <label class="check-pill"><input type="checkbox" name="subject" value="Science" /> Science</label>
+                    <label class="check-pill"><input type="checkbox" name="subject" value="English" /> English</label>
+                    <label class="check-pill"><input type="checkbox" name="subject" value="Hindi" /> Hindi</label>
+                    <label class="check-pill"><input type="checkbox" name="subject" value="SST" /> SST</label>
+                    <label class="check-pill"><input type="checkbox" name="subject" value="Computer" /> Computer</label>
+                  </div>
+                  <span class="field-error" id="err-subject"></span>
+                </div>
+                <div class="form-row-2">
+                  <div class="form-group">
+                    <label>Mode *</label>
                   <div class="input-wrap"><i class="fas fa-sliders-h"></i>
                     <select name="mode" required>
                       <option value="" disabled selected>Select</option>
@@ -471,6 +480,7 @@
                       <option>Group &mdash; Offline</option>
                     </select>
                   </div>
+                  <span class="field-error" id="err-mode"></span>
                 </div>
                 <div class="form-group">
                   <label>Preferred Time *</label>
@@ -483,26 +493,110 @@
                       <option>Night (7-9 PM)</option>
                     </select>
                   </div>
+                  <span class="field-error" id="err-time"></span>
                 </div>
               </div>
-              <div class="form-group">
-                <label>Parent's WhatsApp Number *</label>
-                <div class="input-wrap"><i class="fab fa-whatsapp"></i><input type="tel" name="phone" placeholder="10-digit mobile number" maxlength="10" required pattern="[0-9]{10}" /></div>
-                <span class="field-error" id="err-phone"></span>
-              </div>
-              <div class="form-group">
-                <label>City / Area</label>
-                <div class="input-wrap"><i class="fas fa-map-marker-alt"></i><input type="text" name="city" placeholder="e.g. Lucknow, Gomti Nagar" /></div>
-              </div>
-              <div class="form-group">
-                <label>Additional Message</label>
-                <div class="input-wrap textarea-wrap"><i class="fas fa-comment-alt"></i><textarea name="message" rows="3" placeholder="Any specific requirements or questions..."></textarea></div>
-              </div>
-              <button type="submit" class="btn btn-primary btn-full btn-xl ripple" id="submitBtn">
-                <i class="fab fa-whatsapp"></i> Book FREE Demo on WhatsApp
-              </button>
-              <p class="form-note"><i class="fas fa-shield-alt"></i> 100% confidential. We'll call within 30 mins.</p>
-            </form>
+                <div class="form-group">
+                  <label>Parent's WhatsApp Number *</label>
+                  <div class="input-wrap"><i class="fab fa-whatsapp"></i><input type="tel" name="phone" placeholder="10-digit mobile number" maxlength="10" required pattern="[0-9]{10}" /></div>
+                  <span class="field-error" id="err-phone"></span>
+                </div>
+                <div class="form-group">
+                  <label>City / Area</label>
+                  <div class="input-wrap"><i class="fas fa-map-marker-alt"></i><input type="text" name="city" placeholder="e.g. Lucknow, Gomti Nagar" /></div>
+                </div>
+                <div class="form-group">
+                  <label>Additional Message</label>
+                  <div class="input-wrap textarea-wrap"><i class="fas fa-comment-alt"></i><textarea name="message" rows="3" placeholder="Any specific requirements or questions..."></textarea></div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full btn-xl ripple" id="submitBtn">
+                  <i class="fab fa-whatsapp"></i> Book FREE Demo on WhatsApp
+                </button>
+                <p class="form-note"><i class="fas fa-shield-alt"></i> 100% confidential. We'll call within 30 mins.</p>
+              </form>
+            </div>
+
+            <div class="form-panel" id="teacherFormPanel">
+              <form class="lead-form" id="teacherForm">
+                <div class="form-group">
+                  <label>Teacher's Full Name *</label>
+                  <div class="input-wrap"><i class="fas fa-user-tie"></i><input type="text" name="name" placeholder="e.g. Anjali Singh" required /></div>
+                  <span class="field-error" id="teacher-err-name"></span>
+                </div>
+                <div class="form-row-2">
+                  <div class="form-group">
+                    <label>Highest Qualification *</label>
+                    <div class="input-wrap"><i class="fas fa-graduation-cap"></i><input type="text" name="qualification" placeholder="e.g. M.Sc Maths, B.Ed" required /></div>
+                  </div>
+                  <div class="form-group">
+                    <label>Teaching Experience *</label>
+                    <div class="input-wrap"><i class="fas fa-briefcase"></i>
+                      <select name="experience" required>
+                        <option value="" disabled selected>Select</option>
+                        <option>0-1 years</option>
+                        <option>1-3 years</option>
+                        <option>3-5 years</option>
+                        <option>5+ years</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Subjects You Can Teach *</label>
+                  <div class="subject-checkboxes">
+                    <label class="check-pill teacher-check-pill"><input type="checkbox" name="subject" value="Maths" /> Maths</label>
+                    <label class="check-pill teacher-check-pill"><input type="checkbox" name="subject" value="Science" /> Science</label>
+                    <label class="check-pill teacher-check-pill"><input type="checkbox" name="subject" value="English" /> English</label>
+                    <label class="check-pill teacher-check-pill"><input type="checkbox" name="subject" value="Hindi" /> Hindi</label>
+                    <label class="check-pill teacher-check-pill"><input type="checkbox" name="subject" value="SST" /> SST</label>
+                    <label class="check-pill teacher-check-pill"><input type="checkbox" name="subject" value="Computer" /> Computer</label>
+                  </div>
+                  <span class="field-error" id="teacher-err-subject"></span>
+                </div>
+                <div class="form-row-2">
+                  <div class="form-group">
+                    <label>Preferred Mode *</label>
+                    <div class="input-wrap"><i class="fas fa-sliders-h"></i>
+                      <select name="mode" required>
+                        <option value="" disabled selected>Select</option>
+                        <option>Offline (Home Visit)</option>
+                        <option>Online</option>
+                        <option>Both Online & Offline</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Available Time Slot *</label>
+                    <div class="input-wrap"><i class="fas fa-clock"></i>
+                      <select name="time" required>
+                        <option value="" disabled selected>Select</option>
+                        <option>Morning (6-10 AM)</option>
+                        <option>Afternoon (11 AM-4 PM)</option>
+                        <option>Evening (4-8 PM)</option>
+                        <option>Flexible</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>WhatsApp Number *</label>
+                  <div class="input-wrap"><i class="fab fa-whatsapp"></i><input type="tel" name="phone" placeholder="10-digit mobile number" maxlength="10" required pattern="[0-9]{10}" /></div>
+                  <span class="field-error" id="teacher-err-phone"></span>
+                </div>
+                <div class="form-group">
+                  <label>City / Area *</label>
+                  <div class="input-wrap"><i class="fas fa-map-marker-alt"></i><input type="text" name="city" placeholder="e.g. Delhi, Rohini" required /></div>
+                </div>
+                <div class="form-group">
+                  <label>Additional Message</label>
+                  <div class="input-wrap textarea-wrap"><i class="fas fa-comment-alt"></i><textarea name="message" rows="3" placeholder="Mention classes, boards, or preferred localities..."></textarea></div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full btn-xl ripple" id="teacherSubmitBtn">
+                  <i class="fab fa-whatsapp"></i> Apply as Teacher on WhatsApp
+                </button>
+                <p class="form-note"><i class="fas fa-user-check"></i> We verify every profile before onboarding.</p>
+              </form>
+            </div>
           </div>
         </div>
       </div>
@@ -552,8 +646,8 @@
         <span class="section-badge">Contact Us</span>
         <h2>Let's Get <span class="highlight">Connected</span></h2>
         <div class="contact-items">
-          <div class="ci"><div class="ci-icon"><i class="fas fa-phone-alt"></i></div><div><strong>Call / WhatsApp</strong><a href="tel:+919999999999">+91 99999 99999</a></div></div>
-          <div class="ci"><div class="ci-icon ci-wa"><i class="fab fa-whatsapp"></i></div><div><strong>WhatsApp Chat</strong><a href="https://wa.me/919999999999" target="_blank">Message Us Now</a></div></div>
+          <div class="ci"><div class="ci-icon"><i class="fas fa-phone-alt"></i></div><div><strong>Call / WhatsApp</strong><a href="tel:+919128296275">+91 91282 96275</a></div></div>
+          <div class="ci"><div class="ci-icon ci-wa"><i class="fab fa-whatsapp"></i></div><div><strong>WhatsApp Chat</strong><a href="https://wa.me/919128296275" target="_blank">Message Us Now</a></div></div>
           <div class="ci"><div class="ci-icon ci-loc"><i class="fas fa-map-marker-alt"></i></div><div><strong>Service Area</strong><span>Delhi NCR, Lucknow &amp; Online &mdash; Pan India</span></div></div>
           <div class="ci"><div class="ci-icon ci-time"><i class="fas fa-clock"></i></div><div><strong>Available</strong><span>Mon&ndash;Sat: 7 AM &ndash; 9 PM</span></div></div>
         </div>
@@ -602,7 +696,7 @@
   </footer>
 
   <!-- Floating WhatsApp Button -->
-  <a href="https://wa.me/919999999999?text=Hi!%20I%20want%20to%20know%20more%20about%20Utkarsh%20Home%20Tuition." class="wa-float" target="_blank" aria-label="Chat on WhatsApp">
+  <a href="https://wa.me/919128296275?text=Hi!%20I%20want%20to%20know%20more%20about%20Utkarsh%20Home%20Tuition." class="wa-float" target="_blank" aria-label="Chat on WhatsApp">
     <i class="fab fa-whatsapp"></i>
     <span class="wa-tooltip">Chat with us!</span>
     <span class="wa-pulse"></span>
