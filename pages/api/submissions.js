@@ -16,9 +16,66 @@ const mailTransporter = smtpConfigured
       host: SMTP_HOST,
       port: SMTP_PORT,
       secure: SMTP_SECURE,
-      auth: { user: SMTP_USER, pass: SMTP_PASS }
+      auth: { user: SMTP_USER, pass: SMTP_PASS },
+      connectionTimeout: 8000,
+      greetingTimeout: 8000,
+      socketTimeout: 12000
     })
   : null;
+
+const ALLOWED_KINDS = new Set(['student', 'teacher', 'popup', 'quick', 'contact']);
+
+function isValidPhone(phone) {
+  return /^\d{10}$/.test(String(phone || '').trim());
+}
+
+function validatePayload(payload) {
+  const kind = String(payload.kind || '').trim();
+  if (!ALLOWED_KINDS.has(kind)) return 'Invalid lead type';
+
+  if (kind === 'student') {
+    if (!String(payload.name || '').trim()) return 'Student name is required';
+    if (!isValidPhone(payload.phone)) return 'Valid phone is required';
+    if (!String(payload.className || '').trim()) return 'Class is required';
+    if (!String(payload.board || '').trim()) return 'Board is required';
+    if (!Array.isArray(payload.subjects) || payload.subjects.length < 1) return 'At least one subject is required';
+    if (!String(payload.mode || '').trim()) return 'Mode is required';
+    if (!String(payload.time || '').trim()) return 'Preferred time is required';
+    return null;
+  }
+
+  if (kind === 'teacher') {
+    if (!String(payload.name || '').trim()) return 'Teacher name is required';
+    if (!isValidPhone(payload.phone)) return 'Valid phone is required';
+    if (!String(payload.qualification || '').trim()) return 'Qualification is required';
+    if (!String(payload.experience || '').trim()) return 'Experience is required';
+    if (!Array.isArray(payload.subjects) || payload.subjects.length < 1) return 'At least one subject is required';
+    if (!String(payload.mode || '').trim()) return 'Mode is required';
+    if (!String(payload.time || '').trim()) return 'Availability is required';
+    if (!String(payload.city || '').trim()) return 'City is required';
+    return null;
+  }
+
+  if (kind === 'popup') {
+    if (!String(payload.name || '').trim()) return 'Student name is required';
+    if (!isValidPhone(payload.phone)) return 'Valid phone is required';
+    if (!String(payload.className || '').trim()) return 'Class is required';
+    return null;
+  }
+
+  if (kind === 'quick') {
+    if (!isValidPhone(payload.phone)) return 'Valid phone is required';
+    return null;
+  }
+
+  if (kind === 'contact') {
+    if (!String(payload.name || '').trim()) return 'Name is required';
+    if (!isValidPhone(payload.phone)) return 'Valid phone is required';
+    return null;
+  }
+
+  return null;
+}
 
 function formatValue(value) {
   if (Array.isArray(value)) return value.length ? value.join(', ') : '-';
@@ -72,13 +129,16 @@ async function notifyAdminLead(submission) {
   if (!mailTransporter) return { sent: false, reason: 'smtp_not_configured' };
 
   const email = buildLeadEmail(submission);
-  await mailTransporter.sendMail({
-    from: EMAIL_FROM,
-    to: ADMIN_EMAIL,
-    subject: email.subject,
-    text: email.text,
-    html: email.html
-  });
+  await Promise.race([
+    mailTransporter.sendMail({
+      from: EMAIL_FROM,
+      to: ADMIN_EMAIL,
+      subject: email.subject,
+      text: email.text,
+      html: email.html
+    }),
+    new Promise((_, reject) => setTimeout(() => reject(new Error('smtp_timeout')), 10000))
+  ]);
   return { sent: true };
 }
 
@@ -91,12 +151,9 @@ export default async function handler(req, res) {
     await dbConnect();
 
     const payload = req.body || {};
-    if (!payload.kind) {
-      return res.status(400).json({ ok: false, error: 'kind is required' });
-    }
-
-    if (payload.phone && !/^\d{10}$/.test(String(payload.phone).trim())) {
-      return res.status(400).json({ ok: false, error: 'phone must be a 10-digit number' });
+    const validationError = validatePayload(payload);
+    if (validationError) {
+      return res.status(400).json({ ok: false, error: validationError });
     }
 
     const submission = await Submission.create({
@@ -127,18 +184,16 @@ export default async function handler(req, res) {
       console.error('Lead email notification failed:', mailErr.message);
     }
 
-    if (smtpConfigured && !mailStatus.sent) {
-      return res.status(502).json({
-        ok: false,
-        id: submission._id,
-        error: 'Lead saved but admin email notification failed',
-        mailStatus
-      });
-    }
-
-    return res.status(201).json({ ok: true, id: submission._id, mailStatus });
+    return res.status(201).json({
+      ok: true,
+      id: submission._id,
+      mailStatus,
+      message: mailStatus.sent
+        ? 'Lead captured and admin notified'
+        : 'Lead captured; admin notification is pending retry'
+    });
   } catch (error) {
     console.error('Submission save failed:', error);
-    return res.status(500).json({ ok: false, error: 'Unable to save submission' });
+    return res.status(500).json({ ok: false, error: 'Service is temporarily unavailable' });
   }
 }
