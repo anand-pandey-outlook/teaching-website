@@ -72,7 +72,7 @@ document.addEventListener('click', e => {
 /* ─────────────────────────────
    4. TOAST NOTIFICATIONS
 ───────────────────────────── */
-function showToast(msg, type = 'success', duration = 3500) {
+function showToast(msg, type = 'success', duration = 3000) {
   const container = document.getElementById('toastContainer');
   if (!container) return;
   const icon = type === 'success' ? 'fa-check-circle' : 'fa-times-circle';
