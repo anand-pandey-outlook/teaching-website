@@ -118,6 +118,10 @@ async function persistSubmission(payload) {
   }
 }
 
+function isLeadStored(result) {
+  return Boolean(result && result.ok && result.id);
+}
+
 const WHATSAPP_NUMBER = '919128296275';
 
 function initPillCheckboxes(formEl, pillSelector) {
@@ -235,7 +239,7 @@ if (popupForm) {
       meta: { source: 'popup-form' }
     });
 
-    if (!result.ok) {
+    if (!isLeadStored(result)) {
       showToast('We could not submit your request right now. Please try again in a moment.', 'error');
       if (submitBtn) {
         submitBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Book Free Demo Now';
@@ -561,7 +565,7 @@ if (leadForm) {
       meta: { source: 'student-form' }
     });
 
-    if (!result.ok) {
+    if (!isLeadStored(result)) {
       showToast('We could not submit your request right now. Please try again in a moment.', 'error');
       if (submitBtn) {
         submitBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Book FREE Demo on WhatsApp';
@@ -656,7 +660,7 @@ if (teacherForm) {
       meta: { source: 'teacher-form' }
     });
 
-    if (!result.ok) {
+    if (!isLeadStored(result)) {
       showToast('We could not submit your request right now. Please try again in a moment.', 'error');
       if (submitBtn) {
         submitBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Apply as Teacher on WhatsApp';
@@ -703,7 +707,7 @@ if (heroMiniForm) {
       message: 'Quick enquiry from hero mini form',
       meta: { source: 'hero-mini-form' }
     });
-    if (!result.ok) {
+    if (!isLeadStored(result)) {
       showToast('We could not submit your request right now. Please try again in a moment.', 'error');
       if (submitBtn) {
         submitBtn.innerHTML = 'Go <i class="fas fa-arrow-right"></i>';
@@ -749,7 +753,7 @@ if (contactForm) {
       message: message || 'I want to know more.',
       meta: { source: 'contact-form' }
     });
-    if (!result.ok) {
+    if (!isLeadStored(result)) {
       showToast('We could not submit your message right now. Please try again in a moment.', 'error');
       if (submitBtn) {
         submitBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Send on WhatsApp';
