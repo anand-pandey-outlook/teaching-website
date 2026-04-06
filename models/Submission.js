@@ -1,10 +1,10 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const submissionSchema = new mongoose.Schema(
   {
     kind: {
       type: String,
-      enum: ['student', 'teacher', 'popup', 'quick', 'contact'],
+      enum: ["student", "teacher", "popup", "quick", "contact"],
       required: true,
       index: true
     },
@@ -31,4 +31,5 @@ const submissionSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model('Submission', submissionSchema);
+const Submission = mongoose.models.Submission || mongoose.model("Submission", submissionSchema);
+export default Submission;

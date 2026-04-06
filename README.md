@@ -1,29 +1,59 @@
 # teaching-website
 
-Static website + Node/Express backend with MongoDB form storage and SMTP admin notifications.
+Production-style Next.js full-stack app (frontend + backend) with Tailwind CSS, MongoDB, and SMTP.
 
-## Run locally
+## Tech Stack
 
-1. Install dependencies:
-   npm install
-2. Create env file:
-   cp .env.example .env
-3. Set MongoDB + SMTP values inside `.env`.
-4. Start server:
-   npm start
-5. Open:
-   http://localhost:3000
+- Next.js (Pages Router)
+- Tailwind CSS
+- MongoDB via Mongoose
+- SMTP email notifications via Nodemailer
 
-## API
+## Core Features
+
+- Fully route-based Next.js frontend (no static HTML pages)
+- Student/Teacher switch-based lead form with inline validation
+- API-backed lead persistence (`/api/submissions`)
+- Admin email notification on every successful lead submission
+- Health endpoint (`/api/health`) with DB + SMTP status
+
+## Environment
+
+Copy `.env.example` to `.env` and configure:
+
+- `MONGODB_URI`
+- `MONGODB_DB`
+- `SMTP_HOST`
+- `SMTP_PORT`
+- `SMTP_SECURE`
+- `SMTP_USER`
+- `SMTP_PASS`
+- `EMAIL_FROM`
+- `ADMIN_EMAIL`
+
+## Local Development
+
+1. `npm install`
+2. `npm run dev`
+3. Open `http://localhost:3000`
+
+## Production
+
+1. `npm run build`
+2. `npm start`
+
+## App Routes
+
+- `/`
+- `/individual`
+- `/group`
+- `/online`
+- `/offline`
+- `/notes`
+- `/materials`
+- `/tests`
+
+## API Routes
 
 - `POST /api/submissions`
-  - Stores student, teacher, popup, quick, and contact submissions.
-  - Sends email to admin when SMTP is configured.
 - `GET /api/health`
-  - Health check + Mongo connection state + SMTP configured flag.
-
-## Notes
-
-- Frontend still opens WhatsApp as before.
-- Forms now also attempt to persist data in MongoDB through the backend API.
-- Admin lead email notifications are optional and enabled only when SMTP env vars are present.

@@ -2,16 +2,22 @@
   "name": "teaching-website",
   "version": "1.0.0",
   "private": true,
-  "description": "Utkarsh Home Tuition website with MongoDB form submissions",
-  "main": "server.js",
+  "description": "Utkarsh Home Tuition Next.js app with MongoDB + SMTP lead handling",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
   },
   "dependencies": {
-    "dotenv": "^16.5.0",
-    "express": "^4.21.2",
     "mongoose": "^8.12.2",
-    "nodemailer": "^6.10.0"
+    "next": "^15.3.2",
+    "nodemailer": "^6.10.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.17"
   }
 }

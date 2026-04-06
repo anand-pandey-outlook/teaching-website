@@ -1,16 +1,7 @@
-const path = require('path');
-const express = require('express');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const nodemailer = require('nodemailer');
-const Submission = require('./models/Submission');
+import nodemailer from 'nodemailer';
+import dbConnect from '../../lib/dbConnect';
+import Submission from '../../models/Submission';
 
-dotenv.config();
-
-const app = express();
-const PORT = process.env.PORT || 3000;
-const MONGODB_URI = process.env.MONGODB_URI;
-const MONGODB_DB = process.env.MONGODB_DB || 'teaching_website';
 const SMTP_HOST = process.env.SMTP_HOST;
 const SMTP_PORT = Number(process.env.SMTP_PORT || 587);
 const SMTP_USER = process.env.SMTP_USER;
@@ -28,9 +19,6 @@ const mailTransporter = smtpConfigured
       auth: { user: SMTP_USER, pass: SMTP_PASS }
     })
   : null;
-
-app.use(express.json({ limit: '1mb' }));
-app.use(express.static(path.join(__dirname)));
 
 function formatValue(value) {
   if (Array.isArray(value)) return value.length ? value.join(', ') : '-';
@@ -82,6 +70,7 @@ function buildLeadEmail(submission) {
 
 async function notifyAdminLead(submission) {
   if (!mailTransporter) return { sent: false, reason: 'smtp_not_configured' };
+
   const email = buildLeadEmail(submission);
   await mailTransporter.sendMail({
     from: EMAIL_FROM,
@@ -93,14 +82,15 @@ async function notifyAdminLead(submission) {
   return { sent: true };
 }
 
-app.get('/api/health', (_req, res) => {
-  res.json({ ok: true, dbState: mongoose.connection.readyState, smtpConfigured });
-});
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ ok: false, error: 'Method not allowed' });
+  }
 
-app.post('/api/submissions', async (req, res) => {
   try {
-    const payload = req.body || {};
+    await dbConnect();
 
+    const payload = req.body || {};
     if (!payload.kind) {
       return res.status(400).json({ ok: false, error: 'kind is required' });
     }
@@ -125,7 +115,7 @@ app.post('/api/submissions', async (req, res) => {
       meta: {
         source: payload.meta?.source,
         page: payload.meta?.page || req.headers.referer || '',
-        userAgent: req.get('user-agent') || ''
+        userAgent: req.headers['user-agent'] || ''
       }
     });
 
@@ -151,37 +141,4 @@ app.post('/api/submissions', async (req, res) => {
     console.error('Submission save failed:', error);
     return res.status(500).json({ ok: false, error: 'Unable to save submission' });
   }
-});
-
-app.get('*', (req, res) => {
-  if (req.path.startsWith('/api/')) {
-    return res.status(404).json({ ok: false, error: 'Not found' });
-  }
-  return res.sendFile(path.join(__dirname, req.path === '/' ? 'index.html' : req.path));
-});
-
-async function start() {
-  if (!MONGODB_URI) {
-    console.error('Missing MONGODB_URI in environment.');
-    process.exit(1);
-  }
-
-  try {
-    await mongoose.connect(MONGODB_URI, { dbName: MONGODB_DB });
-    console.log(`MongoDB connected to database: ${MONGODB_DB}`);
-    if (smtpConfigured) {
-      console.log(`SMTP notifications enabled for admin: ${ADMIN_EMAIL}`);
-    } else {
-      console.log('SMTP notifications disabled (missing SMTP env vars).');
-    }
-
-    app.listen(PORT, () => {
-      console.log(`Server running at http://localhost:${PORT}`);
-    });
-  } catch (err) {
-    console.error('Failed to connect MongoDB:', err.message);
-    process.exit(1);
-  }
 }
-
-start();
