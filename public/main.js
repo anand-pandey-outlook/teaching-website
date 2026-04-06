@@ -99,9 +99,22 @@ async function persistSubmission(payload) {
         }
       })
     });
-    return res.ok;
+    const data = await res.json().catch(() => ({}));
+    return {
+      ok: res.ok,
+      status: res.status,
+      id: data.id || null,
+      error: data.error || null,
+      mailStatus: data.mailStatus || null
+    };
   } catch (_err) {
-    return false;
+    return {
+      ok: false,
+      status: 0,
+      id: null,
+      error: 'network_error',
+      mailStatus: null
+    };
   }
 }
 
@@ -192,26 +205,54 @@ if (popupForm) {
     const name   = inputs[0].value.trim();
     const phone  = inputs[1].value.trim();
     const cls    = inputs[2].value;
+    const submitBtn = popupForm.querySelector('button[type="submit"]');
+
+    if (name.length < 2) {
+      showToast('Please enter student name.', 'error');
+      return;
+    }
     if (phone.length !== 10 || !/^\d+$/.test(phone)) {
       showToast('Please enter a valid 10-digit WhatsApp number.', 'error');
       return;
     }
+    if (!cls) {
+      showToast('Please select class.', 'error');
+      return;
+    }
+
+    if (submitBtn) {
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+      submitBtn.disabled = true;
+    }
+
     const msg = encodeURIComponent(`Hi Utkarsh Home Tuition!\n\nI want to book a FREE Demo Class.\n\nStudent Name: ${name}\nClass: ${cls}\nPhone: ${phone}\n\nPlease contact me.`);
-    const saved = await persistSubmission({
+    const result = await persistSubmission({
       kind: 'popup',
       name,
       phone,
       className: cls,
+      message: 'Free demo enquiry from popup form',
       meta: { source: 'popup-form' }
     });
+
+    if (!result.ok) {
+      showToast('We could not submit your request right now. Please try again in a moment.', 'error');
+      if (submitBtn) {
+        submitBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Book Free Demo Now';
+        submitBtn.disabled = false;
+      }
+      return;
+    }
+
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
     closePopup();
-    showToast(
-      saved
-        ? 'Opening WhatsApp... We will respond shortly!'
-        : 'Opening WhatsApp... We could not save the form in DB right now.',
-      saved ? 'success' : 'error'
-    );
+    openThanksPopup(name, 'student');
+    showToast('Thanks! Your demo request has been received. Opening WhatsApp...', 'success');
+    popupForm.reset();
+    if (submitBtn) {
+      submitBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Book Free Demo Now';
+      submitBtn.disabled = false;
+    }
   });
 }
 
@@ -502,41 +543,43 @@ if (leadForm) {
 
     const submitBtn = document.getElementById('submitBtn');
     if (submitBtn) {
-      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Redirecting...';
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
       submitBtn.disabled = true;
     }
 
-    setTimeout(async () => {
-      const saved = await persistSubmission({
-        kind: 'student',
-        name: data.name || '',
-        phone,
-        className: data.class || '',
-        board: data.board || '',
-        subjects: selectedSubjects,
-        mode: data.mode || '',
-        time: data.time || '',
-        city: data.city || '',
-        message: data.message || '',
-        meta: { source: 'student-form' }
-      });
+    const result = await persistSubmission({
+      kind: 'student',
+      name: data.name || '',
+      phone,
+      className: data.class || '',
+      board: data.board || '',
+      subjects: selectedSubjects,
+      mode: data.mode || '',
+      time: data.time || '',
+      city: data.city || '',
+      message: data.message || '',
+      meta: { source: 'student-form' }
+    });
 
-      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
-      showToast(
-        saved
-          ? 'Opening WhatsApp! We will reach you within 30 minutes.'
-          : 'Opening WhatsApp! DB save failed, but your WhatsApp request is ready.',
-        saved ? 'success' : 'error'
-      );
-      if (saved) openThanksPopup(data.name || 'there', 'student');
-      leadForm.reset();
-      leadForm.querySelectorAll('input[name="subject"]').forEach(input => { input.checked = false; });
-      leadForm.querySelectorAll('.check-pill').forEach(p => p.classList.remove('selected'));
+    if (!result.ok) {
+      showToast('We could not submit your request right now. Please try again in a moment.', 'error');
       if (submitBtn) {
         submitBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Book FREE Demo on WhatsApp';
         submitBtn.disabled = false;
       }
-    }, 600);
+      return;
+    }
+
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
+    showToast('Thanks! Your demo request has been received. Opening WhatsApp...', 'success');
+    openThanksPopup(data.name || 'there', 'student');
+    leadForm.reset();
+    leadForm.querySelectorAll('input[name="subject"]').forEach(input => { input.checked = false; });
+    leadForm.querySelectorAll('.check-pill').forEach(p => p.classList.remove('selected'));
+    if (submitBtn) {
+      submitBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Book FREE Demo on WhatsApp';
+      submitBtn.disabled = false;
+    }
   });
 }
 
@@ -595,41 +638,43 @@ if (teacherForm) {
 
     const submitBtn = document.getElementById('teacherSubmitBtn');
     if (submitBtn) {
-      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Redirecting...';
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
       submitBtn.disabled = true;
     }
 
-    setTimeout(async () => {
-      const saved = await persistSubmission({
-        kind: 'teacher',
-        name: data.name || '',
-        phone,
-        qualification: data.qualification || '',
-        experience: data.experience || '',
-        subjects: selectedSubjects,
-        mode: data.mode || '',
-        time: data.time || '',
-        city: data.city || '',
-        message: data.message || '',
-        meta: { source: 'teacher-form' }
-      });
+    const result = await persistSubmission({
+      kind: 'teacher',
+      name: data.name || '',
+      phone,
+      qualification: data.qualification || '',
+      experience: data.experience || '',
+      subjects: selectedSubjects,
+      mode: data.mode || '',
+      time: data.time || '',
+      city: data.city || '',
+      message: data.message || '',
+      meta: { source: 'teacher-form' }
+    });
 
-      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
-      showToast(
-        saved
-          ? 'Opening WhatsApp! Our onboarding team will connect soon.'
-          : 'Opening WhatsApp! DB save failed, but your WhatsApp request is ready.',
-        saved ? 'success' : 'error'
-      );
-      if (saved) openThanksPopup(data.name || 'there', 'teacher');
-      teacherForm.reset();
-      teacherForm.querySelectorAll('input[name="subject"]').forEach(input => { input.checked = false; });
-      teacherForm.querySelectorAll('.teacher-check-pill').forEach(p => p.classList.remove('selected'));
+    if (!result.ok) {
+      showToast('We could not submit your request right now. Please try again in a moment.', 'error');
       if (submitBtn) {
         submitBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Apply as Teacher on WhatsApp';
         submitBtn.disabled = false;
       }
-    }, 600);
+      return;
+    }
+
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
+    showToast('Thanks! Your teacher enquiry has been received. Opening WhatsApp...', 'success');
+    openThanksPopup(data.name || 'there', 'teacher');
+    teacherForm.reset();
+    teacherForm.querySelectorAll('input[name="subject"]').forEach(input => { input.checked = false; });
+    teacherForm.querySelectorAll('.teacher-check-pill').forEach(p => p.classList.remove('selected'));
+    if (submitBtn) {
+      submitBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Apply as Teacher on WhatsApp';
+      submitBtn.disabled = false;
+    }
   });
 }
 
@@ -641,21 +686,38 @@ if (heroMiniForm) {
   heroMiniForm.addEventListener('submit', async e => {
     e.preventDefault();
     const input = heroMiniForm.querySelector('input');
+    const submitBtn = heroMiniForm.querySelector('button[type="submit"]');
     const phone = input ? input.value.trim() : '';
     if (!/^\d{10}$/.test(phone)) {
       showToast('Enter a valid 10-digit WhatsApp number.', 'error');
       return;
     }
+    if (submitBtn) {
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+      submitBtn.disabled = true;
+    }
     const msg = encodeURIComponent(`Hi! I want to enquire about classes. My number is ${phone}. Please contact me.`);
-    await persistSubmission({
+    const result = await persistSubmission({
       kind: 'quick',
       phone,
       message: 'Quick enquiry from hero mini form',
       meta: { source: 'hero-mini-form' }
     });
+    if (!result.ok) {
+      showToast('We could not submit your request right now. Please try again in a moment.', 'error');
+      if (submitBtn) {
+        submitBtn.innerHTML = 'Go <i class="fas fa-arrow-right"></i>';
+        submitBtn.disabled = false;
+      }
+      return;
+    }
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
     input.value = '';
-    showToast('Opening WhatsApp... We will call you back!');
+    showToast('Thanks! Your enquiry has been received. Opening WhatsApp...', 'success');
+    if (submitBtn) {
+      submitBtn.innerHTML = 'Go <i class="fas fa-arrow-right"></i>';
+      submitBtn.disabled = false;
+    }
   });
 }
 
@@ -666,6 +728,7 @@ const contactForm = document.getElementById('contactForm');
 if (contactForm) {
   contactForm.addEventListener('submit', async e => {
     e.preventDefault();
+    const submitBtn = contactForm.querySelector('button[type="submit"]');
     const inputs  = contactForm.querySelectorAll('input, textarea');
     const name    = inputs[0]?.value.trim() || '';
     const phone   = inputs[1]?.value.trim() || '';
@@ -674,17 +737,33 @@ if (contactForm) {
       showToast('Please fill name and a valid phone number.', 'error');
       return;
     }
+    if (submitBtn) {
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+      submitBtn.disabled = true;
+    }
     const msg = encodeURIComponent(`Hi Utkarsh Home Tuition!\n\nName: ${name}\nPhone: ${phone}\nMessage: ${message || 'I want to know more.'}`);
-    const saved = await persistSubmission({
+    const result = await persistSubmission({
       kind: 'contact',
       name,
       phone,
       message: message || 'I want to know more.',
       meta: { source: 'contact-form' }
     });
+    if (!result.ok) {
+      showToast('We could not submit your message right now. Please try again in a moment.', 'error');
+      if (submitBtn) {
+        submitBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Send on WhatsApp';
+        submitBtn.disabled = false;
+      }
+      return;
+    }
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
-    showToast(saved ? 'Message sent via WhatsApp!' : 'WhatsApp opened, but DB save failed.', saved ? 'success' : 'error');
+    showToast('Thanks! Your message has been received. Opening WhatsApp...', 'success');
     contactForm.reset();
+    if (submitBtn) {
+      submitBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Send on WhatsApp';
+      submitBtn.disabled = false;
+    }
   });
 }
 
