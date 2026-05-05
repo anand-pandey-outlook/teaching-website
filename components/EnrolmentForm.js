@@ -1,5 +1,51 @@
-const studentSubjects = ["Maths", "Science", "English", "Hindi", "SST", "Computer"];
+const studentSubjects = [
+  "Maths",
+  "Physics",
+  "Chemistry",
+  "Biology",
+  "Science",
+  "English",
+  "Hindi",
+  "Sanskrit",
+  "Urdu",
+  "French",
+  "German",
+  "SST",
+  "Social Science",
+  "History",
+  "Geography",
+  "Civics",
+  "Political Science",
+  "Economics",
+  "Computer",
+  "Computer Science",
+  "Information Technology",
+  "Artificial Intelligence",
+  "Accountancy",
+  "Business Studies",
+  "Commerce",
+  "Entrepreneurship",
+  "Statistics",
+  "Psychology",
+  "Sociology",
+  "Home Science",
+  "Environmental Science",
+  "General Knowledge",
+  "Moral Science",
+  "Drawing",
+  "Art and Craft",
+  "Music",
+  "Physical Education",
+  "EVS",
+  "Olympiad Preparation",
+  "NTSE Preparation",
+  "CUET Preparation",
+  "JEE Foundation",
+  "NEET Foundation"
+];
 const classes = Array.from({ length: 12 }, (_, index) => `Class ${index + 1}`);
+const subjectOptions = studentSubjects.join("|");
+const classOptions = [...classes, 'Other'].join('|');
 
 const config = {
   page: {
@@ -79,11 +125,16 @@ export default function EnrolmentForm({ variant = "page" }) {
           <div className="form-row-2">
             <div className="form-group">
               <label>Class *</label>
-              <div className="input-wrap"><i className="fas fa-layer-group"></i>
-                <select name="class" required defaultValue="">
-                  <option value="" disabled>Select</option>
-                  {classes.map(className => <option key={className}>{className}</option>)}
-                </select>
+              <div className="class-picker" data-class-picker data-classes={classOptions}>
+                <div className="input-wrap class-entry-wrap">
+                  <i className="fas fa-layer-group"></i>
+                  <input type="text" data-class-input placeholder="Select class" autoComplete="off" />
+                </div>
+                <div className="class-suggestions" data-class-suggestions></div>
+                <div className="class-other-wrap" data-class-other-wrap>
+                  <input type="text" data-class-other-input placeholder="e.g. Pre-School, Class 13..." autoComplete="off" />
+                </div>
+                <div data-selected-class></div>
               </div>
               <span className="field-error" id={ids.studentErrors.class}></span>
             </div>
@@ -100,12 +151,19 @@ export default function EnrolmentForm({ variant = "page" }) {
           </div>
           <div className="form-group">
             <label>Subject(s) Needed *</label>
-            <div className="subject-checkboxes">
-              {studentSubjects.map(subject => (
-                <label className={`check-pill ${ids.studentCheckClass}`.trim()} key={subject}>
-                  <input type="checkbox" name="subject" value={subject} /> {subject}
-                </label>
-              ))}
+            <div className="subject-picker" data-subject-picker data-subjects={subjectOptions}>
+              <div className="input-wrap subject-entry-wrap">
+                <i className="fas fa-book"></i>
+                <input
+                  type="text"
+                  name="subjectEntry"
+                  placeholder="Type or select subjects"
+                  autoComplete="off"
+                  data-subject-input
+                />
+              </div>
+              <div className="subject-suggestions" data-subject-suggestions></div>
+              <div className="selected-subjects" data-selected-subjects></div>
             </div>
             <span className="field-error" id={ids.studentErrors.subject}></span>
           </div>
@@ -184,12 +242,19 @@ export default function EnrolmentForm({ variant = "page" }) {
           </div>
           <div className="form-group">
             <label>Subjects You Can Teach *</label>
-            <div className="subject-checkboxes">
-              {studentSubjects.map(subject => (
-                <label className={`check-pill ${ids.teacherCheckClass}`.trim()} key={subject}>
-                  <input type="checkbox" name="subject" value={subject} /> {subject}
-                </label>
-              ))}
+            <div className="subject-picker" data-subject-picker data-subjects={subjectOptions}>
+              <div className="input-wrap subject-entry-wrap">
+                <i className="fas fa-book-open"></i>
+                <input
+                  type="text"
+                  name="subjectEntry"
+                  placeholder="Type or select subjects"
+                  autoComplete="off"
+                  data-subject-input
+                />
+              </div>
+              <div className="subject-suggestions" data-subject-suggestions></div>
+              <div className="selected-subjects" data-selected-subjects></div>
             </div>
             <span className="field-error" id={ids.teacherErrors.subject}></span>
           </div>

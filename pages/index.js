@@ -76,8 +76,8 @@ export default function HomePage() {
         <li><a href="#contact" className="nav-link">Contact</a></li>
       </ul>
       <div className="nav-actions">
-        <a href="tel:+919128296275" className="btn btn-ghost"><i className="fas fa-phone-alt"></i> Call Now</a>
-        <button className="btn btn-primary ripple" onClick={() => window.openPopup && window.openPopup()}>Book Free Demo</button>
+        <a href="tel:+919135939420" className="btn btn-ghost"><i className="fas fa-phone-alt"></i> Call Now</a>
+        <button className="btn btn-primary ripple" onClick={() => window.openPopup && window.openPopup()}>Book Free Demo / Register As Teacher</button>
       </div>
       <button className="hamburger" id="hamburger" aria-label="Menu">
         <span></span><span></span><span></span>
@@ -111,7 +111,7 @@ export default function HomePage() {
         </div>
         <div className="hero-cta">
           <button className="btn btn-primary btn-lg ripple" onClick={() => window.openPopup && window.openPopup()}>
-            <i className="fas fa-rocket"></i> Book FREE Demo
+            <i className="fas fa-rocket"></i> Book FREE Demo / Register As Teacher
           </button>
           <a href="#classes" className="btn btn-glass btn-lg">
             <i className="fas fa-compass"></i> Explore Classes
@@ -402,8 +402,8 @@ export default function HomePage() {
             <li><i className="fas fa-check-circle"></i> Decide after demo &mdash; zero pressure</li>
           </ul>
           <div className="lead-contact-quick">
-            <a href="tel:+919128296275" className="quick-link"><i className="fas fa-phone-alt"></i> +91 91282 96275</a>
-            <a href="https://wa.me/919128296275" className="quick-link whatsapp-link" target="_blank"><i className="fab fa-whatsapp"></i> Chat on WhatsApp</a>
+            <a href="tel:+919135939420" className="quick-link"><i className="fas fa-phone-alt"></i> +91 9135939420</a>
+            <a href="https://wa.me/919135939420" className="quick-link whatsapp-link" target="_blank"><i className="fab fa-whatsapp"></i> Chat on WhatsApp</a>
           </div>
         </div>
         <div className="lead-right">
@@ -423,7 +423,7 @@ export default function HomePage() {
       <div className="faq-list" data-aos="fade-up">
         <div className="faq-item">
           <button className="faq-q">How do I book a demo class? <i className="fas fa-chevron-down faq-icon"></i></button>
-          <div className="faq-a"><p>Simply fill the enrolment form above or click "Book Free Demo". Our team will call you within 30 minutes to schedule a convenient slot.</p></div>
+          <div className="faq-a"><p>Simply fill the enrolment form above or click "Book Free Demo / Register As Teacher". Our team will call you within 30 minutes to schedule a convenient slot.</p></div>
         </div>
         <div className="faq-item">
           <button className="faq-q">What is the difference between Individual and Group tuition? <i className="fas fa-chevron-down faq-icon"></i></button>
@@ -456,8 +456,8 @@ export default function HomePage() {
         <span className="section-badge">Contact Us</span>
         <h2>Let's Get <span className="highlight">Connected</span></h2>
         <div className="contact-items">
-          <div className="ci"><div className="ci-icon"><i className="fas fa-phone-alt"></i></div><div><strong>Call / WhatsApp</strong><a href="tel:+919128296275">+91 91282 96275</a></div></div>
-          <div className="ci"><div className="ci-icon ci-wa"><i className="fab fa-whatsapp"></i></div><div><strong>WhatsApp Chat</strong><a href="https://wa.me/919128296275" target="_blank">Message Us Now</a></div></div>
+          <div className="ci"><div className="ci-icon"><i className="fas fa-phone-alt"></i></div><div><strong>Call / WhatsApp</strong><a href="tel:+919135939420">+91 9135939420</a></div></div>
+          <div className="ci"><div className="ci-icon ci-wa"><i className="fab fa-whatsapp"></i></div><div><strong>WhatsApp Chat</strong><a href="https://wa.me/919135939420" target="_blank">Message Us Now</a></div></div>
           <div className="ci"><div className="ci-icon ci-loc"><i className="fas fa-map-marker-alt"></i></div><div><strong>Service Area</strong><span>Patna &amp; Online - Pan India</span></div></div>
           <div className="ci"><div className="ci-icon ci-loc"><i className="fas fa-building"></i></div><div><strong>Office Address</strong><span>203; OM Complex<br />Ved Nagar Rukunpura<br />Patna</span></div></div>
           <div className="ci"><div className="ci-icon ci-time"><i className="fas fa-clock"></i></div><div><strong>Available</strong><span>Mon&ndash;Sat: 7 AM &ndash; 9 PM</span></div></div>
@@ -507,7 +507,7 @@ export default function HomePage() {
   </footer>
 
   
-  <a href="https://wa.me/919128296275?text=Hi!%20I%20want%20to%20know%20more%20about%20Utkarsh%20Home%20Tuition." className="wa-float" target="_blank" aria-label="Chat on WhatsApp">
+  <a href="https://wa.me/919135939420?text=Hi!%20I%20want%20to%20know%20more%20about%20Utkarsh%20Home%20Tuition." className="wa-float" target="_blank" aria-label="Chat on WhatsApp">
     <i className="fab fa-whatsapp"></i>
     <span className="wa-tooltip">Chat with us!</span>
     <span className="wa-pulse"></span>
@@ -519,7 +519,7 @@ export default function HomePage() {
   
   <div className="sticky-cta" id="stickyCta">
     <button className="btn btn-primary btn-full ripple" onClick={() => window.openPopup && window.openPopup()}>
-      <i className="fas fa-graduation-cap"></i> Book FREE Demo Class
+      <i className="fas fa-graduation-cap"></i> Book FREE Demo / Register As Teacher
     </button>
   </div>
 

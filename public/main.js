@@ -126,6 +126,14 @@ function clearFormAfterSuccess(formEl) {
   if (!formEl) return;
   formEl.reset();
   formEl.querySelectorAll('input[name="subject"]').forEach(input => { input.checked = false; });
+  formEl.querySelectorAll('input[name="customSubject"]').forEach(input => { input.value = ''; });
+  formEl.querySelectorAll('[data-selected-subjects]').forEach(list => { list.innerHTML = ''; });
+  formEl.querySelectorAll('[data-selected-class]').forEach(el => { el.innerHTML = ''; });
+  formEl.querySelectorAll('[data-class-input]').forEach(el => { el.value = ''; });
+  formEl.querySelectorAll('[data-class-suggestions]').forEach(el => { el.classList.remove('open'); });
+  formEl.querySelectorAll('[data-class-other-wrap]').forEach(el => el.classList.remove('visible'));
+  formEl.querySelectorAll('[data-class-other-input]').forEach(el => { el.value = ''; });
+  formEl.querySelectorAll('[data-subject-suggestions]').forEach(list => { list.classList.remove('open'); });
   formEl.querySelectorAll('.check-pill, .teacher-check-pill').forEach(p => p.classList.remove('selected'));
   formEl.querySelectorAll('.field-error').forEach(err => {
     err.textContent = '';
@@ -133,7 +141,240 @@ function clearFormAfterSuccess(formEl) {
   });
 }
 
-const WHATSAPP_NUMBER = '919128296275';
+const WHATSAPP_NUMBER = '919135939420';
+
+function getSelectedClasses(formEl) {
+  return [...formEl.querySelectorAll('input[name="class"][type="hidden"]')]
+    .map(el => el.value.trim())
+    .filter(Boolean);
+}
+
+function getSelectedSubjects(formEl) {
+  const checkedSubjects = [...formEl.querySelectorAll('input[name="subject"]:checked')]
+    .map(el => el.value.trim())
+    .filter(Boolean);
+  const selectedPickerSubjects = [...formEl.querySelectorAll('input[name="subject"][type="hidden"]')]
+    .map(el => el.value.trim())
+    .filter(Boolean);
+  const typedSubjects = [...formEl.querySelectorAll('input[name="subject"]:not([type="checkbox"]):not([type="hidden"])')]
+    .flatMap(el => el.value.split(','))
+    .map(subject => subject.trim())
+    .filter(Boolean);
+  const entrySubjects = [...formEl.querySelectorAll('input[name="subjectEntry"]')]
+    .flatMap(el => el.value.split(','))
+    .map(subject => subject.trim())
+    .filter(Boolean);
+  const customSubject = (formEl.querySelector('input[name="customSubject"]')?.value || '').trim();
+  const subjects = customSubject
+    ? [...checkedSubjects, ...selectedPickerSubjects, ...typedSubjects, ...entrySubjects, customSubject]
+    : [...checkedSubjects, ...selectedPickerSubjects, ...typedSubjects, ...entrySubjects];
+  return [...new Map(subjects.map(subject => [subject.toLowerCase(), subject])).values()];
+}
+
+function initClassPickers() {
+  document.querySelectorAll('[data-class-picker]').forEach(picker => {
+    if (picker.dataset.ready === 'true') return;
+    picker.dataset.ready = 'true';
+
+    const input = picker.querySelector('[data-class-input]');
+    const suggestionsEl = picker.querySelector('[data-class-suggestions]');
+    const selectedEl = picker.querySelector('[data-selected-class]');
+    const otherWrap = picker.querySelector('[data-class-other-wrap]');
+    const otherInput = picker.querySelector('[data-class-other-input]');
+    const options = (picker.dataset.classes || '').split('|').map(c => c.trim()).filter(Boolean);
+
+    if (!input || !suggestionsEl || !selectedEl) return;
+
+    let selectedOption = null;
+
+    const renderSuggestions = () => {
+      const query = input.value.trim().toLowerCase();
+      const matches = options.filter(c => c.toLowerCase().includes(query));
+      suggestionsEl.innerHTML = matches.map(c => {
+        const isSel = c === selectedOption;
+        return `<button type="button" class="class-suggestion${isSel ? ' active' : ''}" data-class-value="${c}">
+          <span class="suggestion-label">${c}</span>
+          <span class="suggestion-tick${isSel ? ' ticked' : ''}"><i class="fas fa-${isSel ? 'check' : 'plus'}"></i></span>
+        </button>`;
+      }).join('');
+      suggestionsEl.classList.toggle('open', matches.length > 0);
+    };
+
+    const clearSelection = () => {
+      selectedEl.innerHTML = '';
+      selectedOption = null;
+      if (otherWrap) otherWrap.classList.remove('visible');
+      if (otherInput) otherInput.value = '';
+    };
+
+    const selectClass = value => {
+      clearSelection();
+      selectedOption = value;
+
+      const chip = document.createElement('span');
+      chip.className = 'selected-subject-chip';
+      const chipText = document.createElement('span');
+      chipText.className = 'suggestion-label';
+      chipText.textContent = value;
+      const hiddenInput = document.createElement('input');
+      hiddenInput.type = 'hidden';
+      hiddenInput.name = 'class';
+      hiddenInput.value = value === 'Other' ? '' : value;
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.setAttribute('aria-label', `Remove ${value}`);
+      removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+      removeBtn.addEventListener('click', () => {
+        clearSelection();
+        renderSuggestions();
+      });
+      chip.append(chipText, hiddenInput, removeBtn);
+      selectedEl.appendChild(chip);
+
+      if (value === 'Other') {
+        if (otherWrap) otherWrap.classList.add('visible');
+        if (otherInput) setTimeout(() => otherInput.focus(), 0);
+      }
+
+      suggestionsEl.classList.remove('open');
+      input.value = '';
+    };
+
+    input.addEventListener('focus', renderSuggestions);
+    input.addEventListener('input', renderSuggestions);
+    input.addEventListener('click', () => {
+      if (!suggestionsEl.classList.contains('open')) renderSuggestions();
+    });
+
+    suggestionsEl.addEventListener('mousedown', e => {
+      const btn = e.target.closest('[data-class-value]');
+      if (!btn) return;
+      e.preventDefault();
+      selectClass(btn.dataset.classValue);
+      renderSuggestions();
+      input.focus();
+    });
+
+    if (otherInput) {
+      otherInput.addEventListener('input', () => {
+        const val = otherInput.value.trim();
+        const hidden = selectedEl.querySelector('input[name="class"]');
+        if (hidden) hidden.value = val;
+        const chipText = selectedEl.querySelector('.suggestion-label');
+        if (chipText) chipText.textContent = val || 'Other';
+      });
+    }
+
+    document.addEventListener('click', e => {
+      if (!picker.contains(e.target)) suggestionsEl.classList.remove('open');
+    });
+  });
+}
+
+function initSubjectPickers() {
+  document.querySelectorAll('[data-subject-picker]').forEach(picker => {
+    if (picker.dataset.ready === 'true') return;
+    picker.dataset.ready = 'true';
+
+    const input = picker.querySelector('[data-subject-input]');
+    const suggestionsEl = picker.querySelector('[data-subject-suggestions]');
+    const selectedEl = picker.querySelector('[data-selected-subjects]');
+    const options = (picker.dataset.subjects || '')
+      .split('|')
+      .map(subject => subject.trim())
+      .filter(Boolean);
+
+    if (!input || !suggestionsEl || !selectedEl) return;
+
+    const getCurrentSubjects = () => [...selectedEl.querySelectorAll('input[name="subject"]')]
+      .map(el => el.value.toLowerCase());
+
+    const renderSuggestions = () => {
+      const query = input.value.trim().toLowerCase();
+      const selected = new Set(getCurrentSubjects());
+      const matches = options.filter(subject =>
+        !selected.has(subject.toLowerCase()) && subject.toLowerCase().includes(query)
+      );
+
+      suggestionsEl.innerHTML = matches
+        .map(subject => `<button type="button" class="subject-suggestion" data-subject-value="${subject}"><span class="suggestion-label">${subject}</span><span class="suggestion-tick"><i class="fas fa-plus"></i></span></button>`)
+        .join('');
+      suggestionsEl.classList.toggle('open', matches.length > 0);
+    };
+
+    const addMatchingOption = () => {
+      const value = input.value.trim();
+      if (!value) return false;
+
+      const matchingOption = options.find(subject => subject.toLowerCase() === value.toLowerCase());
+      if (!matchingOption) return false;
+
+      addSubject(matchingOption);
+      return true;
+    };
+
+    const addSubject = subjectValue => {
+      const subject = String(subjectValue || '').trim();
+      if (!subject) return;
+
+      const selected = new Set(getCurrentSubjects());
+      if (selected.has(subject.toLowerCase())) {
+        input.value = '';
+        renderSuggestions();
+        return;
+      }
+
+      const chip = document.createElement('span');
+      chip.className = 'selected-subject-chip';
+      const chipText = document.createElement('span');
+      chipText.textContent = subject;
+      const hiddenInput = document.createElement('input');
+      hiddenInput.type = 'hidden';
+      hiddenInput.name = 'subject';
+      hiddenInput.value = subject;
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.setAttribute('aria-label', `Remove ${subject}`);
+      removeBtn.setAttribute('data-remove-subject', '');
+      removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+      chip.append(chipText, hiddenInput, removeBtn);
+      selectedEl.appendChild(chip);
+      input.value = '';
+      renderSuggestions();
+    };
+
+    input.addEventListener('focus', renderSuggestions);
+    input.addEventListener('input', () => {
+      if (!addMatchingOption()) renderSuggestions();
+    });
+    input.addEventListener('change', addMatchingOption);
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ',') {
+        e.preventDefault();
+        addSubject(input.value);
+      }
+    });
+
+    suggestionsEl.addEventListener('mousedown', e => {
+      const item = e.target.closest('[data-subject-value]');
+      if (!item) return;
+      e.preventDefault();
+      addSubject(item.dataset.subjectValue);
+      input.focus();
+    });
+
+    selectedEl.addEventListener('click', e => {
+      const removeBtn = e.target.closest('[data-remove-subject]');
+      if (!removeBtn) return;
+      removeBtn.closest('.selected-subject-chip')?.remove();
+      renderSuggestions();
+    });
+
+    document.addEventListener('click', e => {
+      if (!picker.contains(e.target)) suggestionsEl.classList.remove('open');
+    });
+  });
+}
 
 function initPillCheckboxes(formEl, pillSelector) {
   formEl.querySelectorAll(pillSelector).forEach(pill => {
@@ -154,6 +395,9 @@ function initPillCheckboxes(formEl, pillSelector) {
     input.addEventListener('change', syncPill);
   });
 }
+
+initSubjectPickers();
+initClassPickers();
 
 /* ─────────────────────────────
    5. POPUP / MODAL
@@ -448,7 +692,6 @@ if (leadForm) {
 
     const nameInput  = leadForm.querySelector('[name="name"]');
     const phoneInput = leadForm.querySelector('[name="phone"]');
-    const classInput = leadForm.querySelector('[name="class"]');
     const boardInput = leadForm.querySelector('[name="board"]');
     const modeInput  = leadForm.querySelector('[name="mode"]');
     const timeInput  = leadForm.querySelector('[name="time"]');
@@ -466,8 +709,9 @@ if (leadForm) {
       valid = false;
     } else if (errName) errName.classList.remove('show');
 
-    if (!classInput || !classInput.value.trim()) {
-      if (errClass) { errClass.textContent = 'Please select class.'; errClass.classList.add('show'); }
+    const selectedClasses = getSelectedClasses(leadForm);
+    if (!selectedClasses.length) {
+      if (errClass) { errClass.textContent = 'Please select at least one class.'; errClass.classList.add('show'); }
       valid = false;
     } else if (errClass) errClass.classList.remove('show');
 
@@ -493,7 +737,7 @@ if (leadForm) {
       valid = false;
     } else if (errPhone) errPhone.classList.remove('show');
 
-    const selectedSubjects = [...leadForm.querySelectorAll('input[name="subject"]:checked')].map(el => el.value.trim());
+    const selectedSubjects = getSelectedSubjects(leadForm);
     if (!selectedSubjects.length) {
       if (errSubject) { errSubject.textContent = 'Please select at least one subject.'; errSubject.classList.add('show'); }
       valid = false;
@@ -509,7 +753,7 @@ if (leadForm) {
       `Hi Utkarsh Home Tuition!\n\n` +
       `*ENROLMENT REQUEST (STUDENT)*\n\n` +
       `Student Name: ${data.name || ''}\n` +
-      `Class: ${data.class || ''} (${data.board || ''})\n` +
+      `Class: ${selectedClasses.join(', ')} (${data.board || ''})\n` +
       `Subjects Needed: ${subjects}\n` +
       `Mode: ${data.mode || ''}\n` +
       `Preferred Time: ${data.time || ''}\n` +
@@ -529,7 +773,7 @@ if (leadForm) {
       kind: 'student',
       name: data.name || '',
       phone,
-      className: data.class || '',
+      className: selectedClasses.join(', '),
       board: data.board || '',
       subjects: selectedSubjects,
       mode: data.mode || '',
@@ -587,7 +831,7 @@ if (teacherForm) {
       valid = false;
     } else if (errPhone) errPhone.classList.remove('show');
 
-    const selectedSubjects = [...teacherForm.querySelectorAll('input[name="subject"]:checked')].map(el => el.value.trim());
+    const selectedSubjects = getSelectedSubjects(teacherForm);
     if (!selectedSubjects.length) {
       if (errSubject) { errSubject.textContent = 'Please select at least one subject.'; errSubject.classList.add('show'); }
       valid = false;
@@ -662,7 +906,6 @@ if (popupLeadForm) {
 
     const nameInput  = popupLeadForm.querySelector('[name="name"]');
     const phoneInput = popupLeadForm.querySelector('[name="phone"]');
-    const classInput = popupLeadForm.querySelector('[name="class"]');
     const boardInput = popupLeadForm.querySelector('[name="board"]');
     const modeInput  = popupLeadForm.querySelector('[name="mode"]');
     const timeInput  = popupLeadForm.querySelector('[name="time"]');
@@ -679,8 +922,9 @@ if (popupLeadForm) {
       valid = false;
     } else if (errName) errName.classList.remove('show');
 
-    if (!classInput || !classInput.value.trim()) {
-      if (errClass) { errClass.textContent = 'Please select class.'; errClass.classList.add('show'); }
+    const selectedClasses = getSelectedClasses(popupLeadForm);
+    if (!selectedClasses.length) {
+      if (errClass) { errClass.textContent = 'Please select at least one class.'; errClass.classList.add('show'); }
       valid = false;
     } else if (errClass) errClass.classList.remove('show');
 
@@ -705,7 +949,7 @@ if (popupLeadForm) {
       valid = false;
     } else if (errPhone) errPhone.classList.remove('show');
 
-    const selectedSubjects = [...popupLeadForm.querySelectorAll('input[name="subject"]:checked')].map(el => el.value.trim());
+    const selectedSubjects = getSelectedSubjects(popupLeadForm);
     if (!selectedSubjects.length) {
       if (errSubject) { errSubject.textContent = 'Please select at least one subject.'; errSubject.classList.add('show'); }
       valid = false;
@@ -719,7 +963,7 @@ if (popupLeadForm) {
       `Hi Utkarsh Home Tuition!\n\n` +
       `*ENROLMENT REQUEST (STUDENT)*\n\n` +
       `Student Name: ${data.name || ''}\n` +
-      `Class: ${data.class || ''} (${data.board || ''})\n` +
+      `Class: ${selectedClasses.join(', ')} (${data.board || ''})\n` +
       `Subjects Needed: ${subjects}\n` +
       `Mode: ${data.mode || ''}\n` +
       `Preferred Time: ${data.time || ''}\n` +
@@ -739,7 +983,7 @@ if (popupLeadForm) {
       kind: 'student',
       name: data.name || '',
       phone,
-      className: data.class || '',
+      className: selectedClasses.join(', '),
       board: data.board || '',
       subjects: selectedSubjects,
       mode: data.mode || '',
@@ -795,7 +1039,7 @@ if (popupTeacherForm) {
       valid = false;
     } else if (errPhone) errPhone.classList.remove('show');
 
-    const selectedSubjects = [...popupTeacherForm.querySelectorAll('input[name="subject"]:checked')].map(el => el.value.trim());
+    const selectedSubjects = getSelectedSubjects(popupTeacherForm);
     if (!selectedSubjects.length) {
       if (errSubject) { errSubject.textContent = 'Please select at least one subject.'; errSubject.classList.add('show'); }
       valid = false;
