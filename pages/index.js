@@ -458,7 +458,7 @@ export default function HomePage() {
         <div className="contact-items">
           <div className="ci"><div className="ci-icon"><i className="fas fa-phone-alt"></i></div><div><strong>Call / WhatsApp</strong><a href="tel:+919128296275">+91 91282 96275</a></div></div>
           <div className="ci"><div className="ci-icon ci-wa"><i className="fab fa-whatsapp"></i></div><div><strong>WhatsApp Chat</strong><a href="https://wa.me/919128296275" target="_blank">Message Us Now</a></div></div>
-          <div className="ci"><div className="ci-icon ci-loc"><i className="fas fa-map-marker-alt"></i></div><div><strong>Service Area</strong><span>Delhi NCR, Lucknow &amp; Online &mdash; Pan India</span></div></div>
+          <div className="ci"><div className="ci-icon ci-loc"><i className="fas fa-map-marker-alt"></i></div><div><strong>Service Area</strong><span>Patna &amp; Online - Pan India</span></div></div>
           <div className="ci"><div className="ci-icon ci-loc"><i className="fas fa-building"></i></div><div><strong>Office Address</strong><span>203; OM Complex<br />Ved Nagar Rukunpura<br />Patna</span></div></div>
           <div className="ci"><div className="ci-icon ci-time"><i className="fas fa-clock"></i></div><div><strong>Available</strong><span>Mon&ndash;Sat: 7 AM &ndash; 9 PM</span></div></div>
         </div>
