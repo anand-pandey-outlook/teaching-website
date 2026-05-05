@@ -45,7 +45,6 @@ const studentSubjects = [
 ];
 const classes = Array.from({ length: 12 }, (_, index) => `Class ${index + 1}`);
 const subjectOptions = studentSubjects.join("|");
-const classOptions = [...classes, 'Other'].join('|');
 
 const config = {
   page: {
@@ -125,12 +124,20 @@ export default function EnrolmentForm({ variant = "page" }) {
           <div className="form-row-2">
             <div className="form-group">
               <label>Class *</label>
-              <div className="class-picker" data-class-picker data-classes={classOptions}>
-                <div className="input-wrap class-entry-wrap">
+              <div className="class-picker" data-class-picker>
+                <div className="input-wrap class-entry-wrap" data-class-trigger>
                   <i className="fas fa-layer-group"></i>
-                  <input type="text" data-class-input placeholder="Select class" autoComplete="off" />
+                  <span data-class-placeholder className="class-placeholder">Select class</span>
+                  <i className="fas fa-chevron-down class-arrow"></i>
                 </div>
-                <div className="class-suggestions" data-class-suggestions></div>
+                <div className="class-suggestions" data-class-suggestions>
+                  {[...classes, 'Other'].map(cls => (
+                    <button type="button" className="class-suggestion" data-class-value={cls} key={cls}>
+                      <span className="suggestion-label">{cls}</span>
+                      <span className="suggestion-tick"><i className="fas fa-plus"></i></span>
+                    </button>
+                  ))}
+                </div>
                 <div className="class-other-wrap" data-class-other-wrap>
                   <input type="text" data-class-other-input placeholder="e.g. Pre-School, Class 13..." autoComplete="off" />
                 </div>

@@ -129,8 +129,9 @@ function clearFormAfterSuccess(formEl) {
   formEl.querySelectorAll('input[name="customSubject"]').forEach(input => { input.value = ''; });
   formEl.querySelectorAll('[data-selected-subjects]').forEach(list => { list.innerHTML = ''; });
   formEl.querySelectorAll('[data-selected-class]').forEach(el => { el.innerHTML = ''; });
-  formEl.querySelectorAll('[data-class-input]').forEach(el => { el.value = ''; });
-  formEl.querySelectorAll('[data-class-suggestions]').forEach(el => { el.classList.remove('open'); });
+  formEl.querySelectorAll('[data-class-placeholder]').forEach(el => { el.textContent = 'Select class'; });
+  formEl.querySelectorAll('[data-class-trigger]').forEach(el => el.classList.remove('open'));
+  formEl.querySelectorAll('[data-class-suggestions]').forEach(el => { el.classList.remove('open'); el.querySelectorAll('.class-suggestion').forEach(b => { b.classList.remove('active'); const i = b.querySelector('.suggestion-tick i'); if (i) i.className = 'fas fa-plus'; const t = b.querySelector('.suggestion-tick'); if (t) t.classList.remove('ticked'); }); });
   formEl.querySelectorAll('[data-class-other-wrap]').forEach(el => el.classList.remove('visible'));
   formEl.querySelectorAll('[data-class-other-input]').forEach(el => { el.value = ''; });
   formEl.querySelectorAll('[data-subject-suggestions]').forEach(list => { list.classList.remove('open'); });
@@ -176,40 +177,41 @@ function initClassPickers() {
     if (picker.dataset.ready === 'true') return;
     picker.dataset.ready = 'true';
 
-    const input = picker.querySelector('[data-class-input]');
+    const trigger = picker.querySelector('[data-class-trigger]');
+    const placeholder = picker.querySelector('[data-class-placeholder]');
     const suggestionsEl = picker.querySelector('[data-class-suggestions]');
     const selectedEl = picker.querySelector('[data-selected-class]');
     const otherWrap = picker.querySelector('[data-class-other-wrap]');
     const otherInput = picker.querySelector('[data-class-other-input]');
-    const options = (picker.dataset.classes || '').split('|').map(c => c.trim()).filter(Boolean);
 
-    if (!input || !suggestionsEl || !selectedEl) return;
+    if (!trigger || !suggestionsEl || !selectedEl) return;
 
     let selectedOption = null;
 
-    const renderSuggestions = () => {
-      const query = input.value.trim().toLowerCase();
-      const matches = options.filter(c => c.toLowerCase().includes(query));
-      suggestionsEl.innerHTML = matches.map(c => {
-        const isSel = c === selectedOption;
-        return `<button type="button" class="class-suggestion${isSel ? ' active' : ''}" data-class-value="${c}">
-          <span class="suggestion-label">${c}</span>
-          <span class="suggestion-tick${isSel ? ' ticked' : ''}"><i class="fas fa-${isSel ? 'check' : 'plus'}"></i></span>
-        </button>`;
-      }).join('');
-      suggestionsEl.classList.toggle('open', matches.length > 0);
+    const syncActiveState = () => {
+      suggestionsEl.querySelectorAll('.class-suggestion').forEach(btn => {
+        const isSel = btn.dataset.classValue === selectedOption;
+        btn.classList.toggle('active', isSel);
+        const icon = btn.querySelector('.suggestion-tick i');
+        if (icon) icon.className = `fas fa-${isSel ? 'check' : 'plus'}`;
+        const tick = btn.querySelector('.suggestion-tick');
+        if (tick) tick.classList.toggle('ticked', isSel);
+      });
     };
 
     const clearSelection = () => {
       selectedEl.innerHTML = '';
       selectedOption = null;
+      if (placeholder) placeholder.textContent = 'Select class';
       if (otherWrap) otherWrap.classList.remove('visible');
       if (otherInput) otherInput.value = '';
+      syncActiveState();
     };
 
     const selectClass = value => {
       clearSelection();
       selectedOption = value;
+      if (placeholder) placeholder.textContent = value;
 
       const chip = document.createElement('span');
       chip.className = 'selected-subject-chip';
@@ -224,26 +226,24 @@ function initClassPickers() {
       removeBtn.type = 'button';
       removeBtn.setAttribute('aria-label', `Remove ${value}`);
       removeBtn.innerHTML = '<i class="fas fa-times"></i>';
-      removeBtn.addEventListener('click', () => {
-        clearSelection();
-        renderSuggestions();
-      });
+      removeBtn.addEventListener('click', () => clearSelection());
       chip.append(chipText, hiddenInput, removeBtn);
       selectedEl.appendChild(chip);
 
+      syncActiveState();
+      suggestionsEl.classList.remove('open');
+      trigger.classList.remove('open');
+
       if (value === 'Other') {
         if (otherWrap) otherWrap.classList.add('visible');
-        if (otherInput) setTimeout(() => otherInput.focus(), 0);
+        setTimeout(() => otherInput && otherInput.focus(), 0);
       }
-
-      suggestionsEl.classList.remove('open');
-      input.value = '';
     };
 
-    input.addEventListener('focus', renderSuggestions);
-    input.addEventListener('input', renderSuggestions);
-    input.addEventListener('click', () => {
-      if (!suggestionsEl.classList.contains('open')) renderSuggestions();
+    trigger.addEventListener('click', () => {
+      const isOpen = suggestionsEl.classList.contains('open');
+      suggestionsEl.classList.toggle('open', !isOpen);
+      trigger.classList.toggle('open', !isOpen);
     });
 
     suggestionsEl.addEventListener('mousedown', e => {
@@ -251,8 +251,6 @@ function initClassPickers() {
       if (!btn) return;
       e.preventDefault();
       selectClass(btn.dataset.classValue);
-      renderSuggestions();
-      input.focus();
     });
 
     if (otherInput) {
@@ -260,13 +258,16 @@ function initClassPickers() {
         const val = otherInput.value.trim();
         const hidden = selectedEl.querySelector('input[name="class"]');
         if (hidden) hidden.value = val;
-        const chipText = selectedEl.querySelector('.suggestion-label');
-        if (chipText) chipText.textContent = val || 'Other';
+        const chipTextEl = selectedEl.querySelector('.suggestion-label');
+        if (chipTextEl) chipTextEl.textContent = val || 'Other';
       });
     }
 
     document.addEventListener('click', e => {
-      if (!picker.contains(e.target)) suggestionsEl.classList.remove('open');
+      if (!picker.contains(e.target)) {
+        suggestionsEl.classList.remove('open');
+        trigger.classList.remove('open');
+      }
     });
   });
 }

@@ -631,6 +631,11 @@ h4 { font-size: 1.05rem; font-weight: 600; }
 }
 .selected-subject-chip button:hover { background: #EF4444; color: #fff; }
 .class-picker { position: relative; }
+.class-entry-wrap { cursor: pointer; user-select: none; }
+.class-placeholder { flex: 1; font-size: .9rem; color: var(--text-light); font-family: 'Poppins', sans-serif; }
+.class-entry-wrap.open .class-placeholder { color: var(--text-dark); }
+.class-arrow { color: var(--text-light); font-size: .7rem; transition: transform .25s; flex-shrink: 0; }
+.class-entry-wrap.open .class-arrow { transform: rotate(180deg); color: var(--indigo); }
 .class-suggestions {
   display: none; position: absolute; left: 0; right: 0; top: calc(46px + .45rem);
   z-index: 30; max-height: 240px; overflow-y: auto;
