@@ -130,26 +130,39 @@ h4 { font-size: 1.05rem; font-weight: 600; }
 /* ── POPUP ── */
 .popup-overlay {
   position: fixed; inset: 0; background: rgba(10,5,30,.75);
-  backdrop-filter: blur(6px); z-index: 8000;
+  backdrop-filter: blur(6px); z-index: 2147483000;
   display: flex; align-items: center; justify-content: center;
+  padding: 1.25rem;
   opacity: 0; visibility: hidden; transition: opacity .3s, visibility .3s;
+  pointer-events: none;
 }
-.popup-overlay.open { opacity: 1; visibility: visible; }
+.popup-overlay.open { opacity: 1; visibility: visible; pointer-events: auto; }
 .popup-card {
   background: #fff; border-radius: var(--radius-xl);
-  padding: 2.5rem 2rem; max-width: 420px; width: 90%;
+  padding: 2.5rem 2rem; max-width: 420px; width: 100%;
+  max-height: calc(100vh - 2.5rem); overflow-y: auto;
   position: relative; text-align: center;
   transform: scale(.9) translateY(20px);
   transition: transform .35s cubic-bezier(.34,1.56,.64,1);
   box-shadow: var(--shadow-lg);
 }
 .popup-overlay.open .popup-card { transform: scale(1) translateY(0); }
+.enrollment-popup-card {
+  max-width: min(760px, calc(100vw - 2.5rem));
+  padding: 0;
+  overflow: visible;
+}
+.modal-lead-form-card {
+  max-height: calc(100vh - 2.5rem);
+  overflow-y: auto;
+  text-align: left;
+}
 .popup-close {
-  position: absolute; top: 1rem; right: 1rem;
+  position: absolute; top: .8rem; right: .8rem;
   background: var(--bg); border: none; width: 32px; height: 32px;
   border-radius: 50%; cursor: pointer; font-size: .9rem;
   color: var(--text-mid); display: flex; align-items: center; justify-content: center;
-  transition: var(--transition);
+  transition: var(--transition); z-index: 2;
 }
 .popup-close:hover { background: #FEE2E2; color: #DC2626; }
 .popup-icon {

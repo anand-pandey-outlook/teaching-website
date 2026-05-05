@@ -160,7 +160,6 @@ function initPillCheckboxes(formEl, pillSelector) {
 ───────────────────────────── */
 const leadPopup  = document.getElementById('leadPopup');
 const popupClose = document.getElementById('popupClose');
-const popupForm  = document.getElementById('popupForm');
 const thanksPopup = document.getElementById('thanksPopup');
 const thanksPopupClose = document.getElementById('thanksPopupClose');
 const thanksPopupOkBtn = document.getElementById('thanksPopupOkBtn');
@@ -203,73 +202,13 @@ if (thanksPopupClose) thanksPopupClose.addEventListener('click', closeThanksPopu
 if (thanksPopupOkBtn) thanksPopupOkBtn.addEventListener('click', closeThanksPopup);
 if (thanksPopup) thanksPopup.addEventListener('click', e => { if (e.target === thanksPopup) closeThanksPopup(); });
 
-// Auto-open popup after 20 seconds (only once per session)
-if (!sessionStorage.getItem('popupShown')) {
-  setTimeout(() => {
-    if (!leadPopup.classList.contains('open')) {
-      openPopup();
-      sessionStorage.setItem('popupShown', '1');
-    }
-  }, 20000);
+function openLeadPopupIfClosed() {
+  if (!leadPopup || leadPopup.classList.contains('open')) return;
+  openPopup();
 }
 
-if (popupForm) {
-  popupForm.addEventListener('submit', async e => {
-    e.preventDefault();
-    const inputs = popupForm.querySelectorAll('input, select');
-    const name   = inputs[0].value.trim();
-    const phone  = inputs[1].value.trim();
-    const cls    = inputs[2].value;
-    const submitBtn = popupForm.querySelector('button[type="submit"]');
-
-    if (name.length < 2) {
-      showToast('Please enter student name.', 'error');
-      return;
-    }
-    if (phone.length !== 10 || !/^\d+$/.test(phone)) {
-      showToast('Please enter a valid 10-digit WhatsApp number.', 'error');
-      return;
-    }
-    if (!cls) {
-      showToast('Please select class.', 'error');
-      return;
-    }
-
-    if (submitBtn) {
-      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
-      submitBtn.disabled = true;
-    }
-
-    const msg = encodeURIComponent(`Hi Utkarsh Home Tuition!\n\nI want to book a FREE Demo Class.\n\nStudent Name: ${name}\nClass: ${cls}\nPhone: ${phone}\n\nPlease contact me.`);
-    const result = await persistSubmission({
-      kind: 'popup',
-      name,
-      phone,
-      className: cls,
-      message: 'Free demo enquiry from popup form',
-      meta: { source: 'popup-form' }
-    });
-
-    if (!isLeadStored(result)) {
-      showToast('We could not submit your request right now. Please try again in a moment.', 'error');
-      if (submitBtn) {
-        submitBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Book Free Demo Now';
-        submitBtn.disabled = false;
-      }
-      return;
-    }
-
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
-    closePopup();
-    openThanksPopup(name, 'student');
-    showToast('Thanks! Your demo request has been received. Opening WhatsApp...', 'success');
-    clearFormAfterSuccess(popupForm);
-    if (submitBtn) {
-      submitBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Book Free Demo Now';
-      submitBtn.disabled = false;
-    }
-  });
-}
+openLeadPopupIfClosed();
+setInterval(openLeadPopupIfClosed, 60000);
 
 /* ─────────────────────────────
    6. HERO PARTICLES
@@ -457,6 +396,30 @@ if (leadFormSwitch) {
   const titleEl = document.getElementById('leadFormTitle');
   const studentPanel = document.getElementById('studentFormPanel');
   const teacherPanel = document.getElementById('teacherFormPanel');
+
+  const setActiveForm = (type) => {
+    const isTeacher = type === 'teacher';
+    switchBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.formType === type));
+    if (studentPanel) studentPanel.classList.toggle('active', !isTeacher);
+    if (teacherPanel) teacherPanel.classList.toggle('active', isTeacher);
+    if (titleEl) {
+      titleEl.innerHTML = isTeacher
+        ? '<i class="fas fa-chalkboard-teacher"></i> Teacher Onboarding Form'
+        : '<i class="fas fa-graduation-cap"></i> Enrolment Form';
+    }
+  };
+
+  switchBtns.forEach(btn => {
+    btn.addEventListener('click', () => setActiveForm(btn.dataset.formType || 'student'));
+  });
+}
+
+const popupLeadFormSwitch = document.getElementById('popupLeadFormSwitch');
+if (popupLeadFormSwitch) {
+  const switchBtns = popupLeadFormSwitch.querySelectorAll('.form-switch-btn');
+  const titleEl = document.getElementById('popupLeadFormTitle');
+  const studentPanel = document.getElementById('popupStudentFormPanel');
+  const teacherPanel = document.getElementById('popupTeacherFormPanel');
 
   const setActiveForm = (type) => {
     const isTeacher = type === 'teacher';
@@ -682,6 +645,215 @@ if (teacherForm) {
     showToast('Thanks! Your teacher enquiry has been received. Opening WhatsApp...', 'success');
     openThanksPopup(data.name || 'there', 'teacher');
     clearFormAfterSuccess(teacherForm);
+    if (submitBtn) {
+      submitBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Apply as Teacher on WhatsApp';
+      submitBtn.disabled = false;
+    }
+  });
+}
+
+const popupLeadForm = document.getElementById('popupLeadForm');
+if (popupLeadForm) {
+  initPillCheckboxes(popupLeadForm, '.popup-check-pill');
+
+  popupLeadForm.addEventListener('submit', async e => {
+    e.preventDefault();
+    let valid = true;
+
+    const nameInput  = popupLeadForm.querySelector('[name="name"]');
+    const phoneInput = popupLeadForm.querySelector('[name="phone"]');
+    const classInput = popupLeadForm.querySelector('[name="class"]');
+    const boardInput = popupLeadForm.querySelector('[name="board"]');
+    const modeInput  = popupLeadForm.querySelector('[name="mode"]');
+    const timeInput  = popupLeadForm.querySelector('[name="time"]');
+    const errName    = document.getElementById('popup-err-name');
+    const errPhone   = document.getElementById('popup-err-phone');
+    const errSubject = document.getElementById('popup-err-subject');
+    const errClass   = document.getElementById('popup-err-class');
+    const errBoard   = document.getElementById('popup-err-board');
+    const errMode    = document.getElementById('popup-err-mode');
+    const errTime    = document.getElementById('popup-err-time');
+
+    if (nameInput && nameInput.value.trim().length < 2) {
+      if (errName) { errName.textContent = 'Please enter student name.'; errName.classList.add('show'); }
+      valid = false;
+    } else if (errName) errName.classList.remove('show');
+
+    if (!classInput || !classInput.value.trim()) {
+      if (errClass) { errClass.textContent = 'Please select class.'; errClass.classList.add('show'); }
+      valid = false;
+    } else if (errClass) errClass.classList.remove('show');
+
+    if (!boardInput || !boardInput.value.trim()) {
+      if (errBoard) { errBoard.textContent = 'Please select board.'; errBoard.classList.add('show'); }
+      valid = false;
+    } else if (errBoard) errBoard.classList.remove('show');
+
+    if (!modeInput || !modeInput.value.trim()) {
+      if (errMode) { errMode.textContent = 'Please select mode.'; errMode.classList.add('show'); }
+      valid = false;
+    } else if (errMode) errMode.classList.remove('show');
+
+    if (!timeInput || !timeInput.value.trim()) {
+      if (errTime) { errTime.textContent = 'Please select preferred time.'; errTime.classList.add('show'); }
+      valid = false;
+    } else if (errTime) errTime.classList.remove('show');
+
+    const phone = phoneInput ? phoneInput.value.trim() : '';
+    if (!/^\d{10}$/.test(phone)) {
+      if (errPhone) { errPhone.textContent = 'Enter a valid 10-digit number.'; errPhone.classList.add('show'); }
+      valid = false;
+    } else if (errPhone) errPhone.classList.remove('show');
+
+    const selectedSubjects = [...popupLeadForm.querySelectorAll('input[name="subject"]:checked')].map(el => el.value.trim());
+    if (!selectedSubjects.length) {
+      if (errSubject) { errSubject.textContent = 'Please select at least one subject.'; errSubject.classList.add('show'); }
+      valid = false;
+    } else if (errSubject) errSubject.classList.remove('show');
+
+    if (!valid) { showToast('Please fix the errors before submitting.', 'error'); return; }
+
+    const data = Object.fromEntries(new FormData(popupLeadForm));
+    const subjects = selectedSubjects.join(', ');
+    const msg = encodeURIComponent(
+      `Hi Utkarsh Home Tuition!\n\n` +
+      `*ENROLMENT REQUEST (STUDENT)*\n\n` +
+      `Student Name: ${data.name || ''}\n` +
+      `Class: ${data.class || ''} (${data.board || ''})\n` +
+      `Subjects Needed: ${subjects}\n` +
+      `Mode: ${data.mode || ''}\n` +
+      `Preferred Time: ${data.time || ''}\n` +
+      `Phone: ${phone}\n` +
+      `City: ${data.city || 'Not specified'}\n` +
+      `Message: ${data.message || 'None'}\n\n` +
+      `This is a student enquiry. Please contact me to schedule a free demo class.`
+    );
+
+    const submitBtn = document.getElementById('popupSubmitBtn');
+    if (submitBtn) {
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+      submitBtn.disabled = true;
+    }
+
+    const result = await persistSubmission({
+      kind: 'student',
+      name: data.name || '',
+      phone,
+      className: data.class || '',
+      board: data.board || '',
+      subjects: selectedSubjects,
+      mode: data.mode || '',
+      time: data.time || '',
+      city: data.city || '',
+      message: data.message || '',
+      meta: { source: 'popup-student-form' }
+    });
+
+    if (!isLeadStored(result)) {
+      showToast('We could not submit your request right now. Please try again in a moment.', 'error');
+      if (submitBtn) {
+        submitBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Book FREE Demo on WhatsApp';
+        submitBtn.disabled = false;
+      }
+      return;
+    }
+
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
+    closePopup();
+    openThanksPopup(data.name || 'there', 'student');
+    showToast('Thanks! Your demo request has been received. Opening WhatsApp...', 'success');
+    clearFormAfterSuccess(popupLeadForm);
+    if (submitBtn) {
+      submitBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Book FREE Demo on WhatsApp';
+      submitBtn.disabled = false;
+    }
+  });
+}
+
+const popupTeacherForm = document.getElementById('popupTeacherForm');
+if (popupTeacherForm) {
+  initPillCheckboxes(popupTeacherForm, '.popup-teacher-check-pill');
+
+  popupTeacherForm.addEventListener('submit', async e => {
+    e.preventDefault();
+    let valid = true;
+
+    const nameInput  = popupTeacherForm.querySelector('[name="name"]');
+    const phoneInput = popupTeacherForm.querySelector('[name="phone"]');
+    const errName    = document.getElementById('popup-teacher-err-name');
+    const errPhone   = document.getElementById('popup-teacher-err-phone');
+    const errSubject = document.getElementById('popup-teacher-err-subject');
+
+    if (nameInput && nameInput.value.trim().length < 2) {
+      if (errName) { errName.textContent = 'Please enter your full name.'; errName.classList.add('show'); }
+      valid = false;
+    } else if (errName) errName.classList.remove('show');
+
+    const phone = phoneInput ? phoneInput.value.trim() : '';
+    if (!/^\d{10}$/.test(phone)) {
+      if (errPhone) { errPhone.textContent = 'Enter a valid 10-digit number.'; errPhone.classList.add('show'); }
+      valid = false;
+    } else if (errPhone) errPhone.classList.remove('show');
+
+    const selectedSubjects = [...popupTeacherForm.querySelectorAll('input[name="subject"]:checked')].map(el => el.value.trim());
+    if (!selectedSubjects.length) {
+      if (errSubject) { errSubject.textContent = 'Please select at least one subject.'; errSubject.classList.add('show'); }
+      valid = false;
+    } else if (errSubject) errSubject.classList.remove('show');
+
+    if (!valid) { showToast('Please fix the errors before submitting.', 'error'); return; }
+
+    const data = Object.fromEntries(new FormData(popupTeacherForm));
+    const msg = encodeURIComponent(
+      `Hi Utkarsh Home Tuition!\n\n` +
+      `*TEACHER ROLE ENQUIRY*\n\n` +
+      `I am querying about the teacher role at Utkarsh Home Tuition.\n\n` +
+      `Teacher Name: ${data.name || ''}\n` +
+      `Qualification: ${data.qualification || ''}\n` +
+      `Experience: ${data.experience || ''}\n` +
+      `Subjects I Can Teach: ${selectedSubjects.join(', ')}\n` +
+      `Preferred Mode: ${data.mode || ''}\n` +
+      `Availability: ${data.time || ''}\n` +
+      `Phone: ${phone}\n` +
+      `City: ${data.city || ''}\n` +
+      `Message: ${data.message || 'None'}\n\n` +
+      `Please contact me regarding teacher onboarding.`
+    );
+
+    const submitBtn = document.getElementById('popupTeacherSubmitBtn');
+    if (submitBtn) {
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+      submitBtn.disabled = true;
+    }
+
+    const result = await persistSubmission({
+      kind: 'teacher',
+      name: data.name || '',
+      phone,
+      qualification: data.qualification || '',
+      experience: data.experience || '',
+      subjects: selectedSubjects,
+      mode: data.mode || '',
+      time: data.time || '',
+      city: data.city || '',
+      message: data.message || '',
+      meta: { source: 'popup-teacher-form' }
+    });
+
+    if (!isLeadStored(result)) {
+      showToast('We could not submit your request right now. Please try again in a moment.', 'error');
+      if (submitBtn) {
+        submitBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Apply as Teacher on WhatsApp';
+        submitBtn.disabled = false;
+      }
+      return;
+    }
+
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
+    closePopup();
+    openThanksPopup(data.name || 'there', 'teacher');
+    showToast('Thanks! Your teacher enquiry has been received. Opening WhatsApp...', 'success');
+    clearFormAfterSuccess(popupTeacherForm);
     if (submitBtn) {
       submitBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Apply as Teacher on WhatsApp';
       submitBtn.disabled = false;
