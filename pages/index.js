@@ -456,7 +456,7 @@ export default function HomePage() {
         <span className="section-badge">Contact Us</span>
         <h2>Let's Get <span className="highlight">Connected</span></h2>
         <div className="contact-items">
-          <div className="ci"><div className="ci-icon"><i className="fas fa-phone-alt"></i></div><div><strong>Call / WhatsApp</strong><a href="tel:+919204874552">+91 9204874552</a></div></div>
+          <div className="ci"><div className="ci-icon"><i className="fas fa-phone-alt"></i></div><div><strong>Call</strong><a href="tel:+919204874552">+91 9204874552</a><span> / <a href="tel:+919135939420">+91 9135939420</a></span></div></div>
           <div className="ci"><div className="ci-icon ci-wa"><i className="fab fa-whatsapp"></i></div><div><strong>WhatsApp Chat</strong><a href="https://wa.me/919135939420" target="_blank">Message Us Now</a></div></div>
           <div className="ci"><div className="ci-icon ci-loc"><i className="fas fa-map-marker-alt"></i></div><div><strong>Service Area</strong><span>Patna &amp; Online - Pan India</span></div></div>
           <div className="ci"><div className="ci-icon ci-loc"><i className="fas fa-building"></i></div><div><strong>Office Address</strong><span>203; OM Complex<br />Ved Nagar Rukunpura<br />Patna</span></div></div>
