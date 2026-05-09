@@ -17,9 +17,9 @@ const mailTransporter = smtpConfigured
       port: SMTP_PORT,
       secure: SMTP_SECURE,
       auth: { user: SMTP_USER, pass: SMTP_PASS },
-      connectionTimeout: 8000,
-      greetingTimeout: 8000,
-      socketTimeout: 12000
+      connectionTimeout: 15000,
+      greetingTimeout: 15000,
+      socketTimeout: 20000
     })
   : null;
 
@@ -129,16 +129,13 @@ async function notifyAdminLead(submission) {
   if (!mailTransporter) return { sent: false, reason: 'smtp_not_configured' };
 
   const email = buildLeadEmail(submission);
-  await Promise.race([
-    mailTransporter.sendMail({
-      from: EMAIL_FROM,
-      to: ADMIN_EMAIL,
-      subject: email.subject,
-      text: email.text,
-      html: email.html
-    }),
-    new Promise((_, reject) => setTimeout(() => reject(new Error('smtp_timeout')), 3500))
-  ]);
+  await mailTransporter.sendMail({
+    from: EMAIL_FROM,
+    to: ADMIN_EMAIL,
+    subject: email.subject,
+    text: email.text,
+    html: email.html
+  });
   return { sent: true };
 }
 

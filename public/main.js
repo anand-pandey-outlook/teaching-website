@@ -1299,5 +1299,18 @@ window.switchMode = function(btn, showId, hideId) {
   btn.classList.add('active');
 };
 
+// Call widget
+const callWidget = document.getElementById('callWidget');
+const callWidgetBtn = document.getElementById('callWidgetBtn');
+if (callWidget && callWidgetBtn) {
+  callWidgetBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    callWidget.classList.toggle('open');
+  });
+  document.addEventListener('click', (e) => {
+    if (!callWidget.contains(e.target)) callWidget.classList.remove('open');
+  });
+}
+
 console.log('%c Utkarsh Home Tuition ✦', 'color:#FF6B00;font-size:18px;font-weight:bold;');
 console.log('%c Website loaded successfully!', 'color:#3A0CA3;font-size:12px;');

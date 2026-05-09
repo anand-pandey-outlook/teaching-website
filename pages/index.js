@@ -402,7 +402,7 @@ export default function HomePage() {
             <li><i className="fas fa-check-circle"></i> Decide after demo &mdash; zero pressure</li>
           </ul>
           <div className="lead-contact-quick">
-            <a href="tel:+919135939420" className="quick-link"><i className="fas fa-phone-alt"></i> +91 9135939420</a>
+            <a href="tel:+919204874552" className="quick-link"><i className="fas fa-phone-alt"></i> +91 9204874552</a>
             <a href="https://wa.me/919135939420" className="quick-link whatsapp-link" target="_blank"><i className="fab fa-whatsapp"></i> Chat on WhatsApp</a>
           </div>
         </div>
@@ -456,7 +456,7 @@ export default function HomePage() {
         <span className="section-badge">Contact Us</span>
         <h2>Let's Get <span className="highlight">Connected</span></h2>
         <div className="contact-items">
-          <div className="ci"><div className="ci-icon"><i className="fas fa-phone-alt"></i></div><div><strong>Call / WhatsApp</strong><a href="tel:+919135939420">+91 9135939420</a></div></div>
+          <div className="ci"><div className="ci-icon"><i className="fas fa-phone-alt"></i></div><div><strong>Call / WhatsApp</strong><a href="tel:+919204874552">+91 9204874552</a></div></div>
           <div className="ci"><div className="ci-icon ci-wa"><i className="fab fa-whatsapp"></i></div><div><strong>WhatsApp Chat</strong><a href="https://wa.me/919135939420" target="_blank">Message Us Now</a></div></div>
           <div className="ci"><div className="ci-icon ci-loc"><i className="fas fa-map-marker-alt"></i></div><div><strong>Service Area</strong><span>Patna &amp; Online - Pan India</span></div></div>
           <div className="ci"><div className="ci-icon ci-loc"><i className="fas fa-building"></i></div><div><strong>Office Address</strong><span>203; OM Complex<br />Ved Nagar Rukunpura<br />Patna</span></div></div>
@@ -507,6 +507,33 @@ export default function HomePage() {
   </footer>
 
   
+  <div className="call-widget" id="callWidget">
+    <div className="call-options">
+      <a
+        href="https://wa.me/919204874552?text=Hi!%20I%20want%20to%20know%20more%20about%20Utkarsh%20Home%20Tuition."
+        className="call-opt call-opt-wa"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="WhatsApp"
+      >
+        <i className="fab fa-whatsapp"></i>
+        <span className="call-opt-label">WhatsApp</span>
+      </a>
+      <a
+        href="tel:+919204874552"
+        className="call-opt call-opt-phone"
+        aria-label="Call Now"
+      >
+        <i className="fas fa-phone-alt"></i>
+        <span className="call-opt-label">Call Now</span>
+      </a>
+    </div>
+    <button className="call-main-btn" id="callWidgetBtn" aria-label="Contact options">
+      <i className="fas fa-phone-alt"></i>
+      <span className="call-pulse"></span>
+    </button>
+  </div>
+
   <a href="https://wa.me/919135939420?text=Hi!%20I%20want%20to%20know%20more%20about%20Utkarsh%20Home%20Tuition." className="wa-float" target="_blank" aria-label="Chat on WhatsApp">
     <i className="fab fa-whatsapp"></i>
     <span className="wa-tooltip">Chat with us!</span>
